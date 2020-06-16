@@ -8,10 +8,11 @@ import '../widgets/RockWidget.dart';
 import 'package:provider/provider.dart';
 import '../dataProvider/portalGorskiApi.dart';
 import '../widgets/MapMarkers.dart';
-
+import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
 import 'package:latlong/latlong.dart';
 import 'dart:async';
 import 'dart:developer';
+import '../widgets/markerPopup.dart';
 
 class MyTestPage extends StatefulWidget {
   static const String route = 'MyTest';
@@ -24,17 +25,15 @@ class MyTestPage extends StatefulWidget {
 
 class MapPage extends State<MyTestPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
+  final PopupController _popupLayerController = PopupController();
   Future<Map<String, List<Item>>> futureData;
-  //myNewTopoApiData myData;
+
 
 
   @override
   void initState() {
     super.initState();
-
     futureData= fetchData();
-
   }
 
   @override
@@ -71,16 +70,18 @@ class MapPage extends State<MyTestPage> {
                   if (snapshot.hasData && (snapshot.data["rock"].length != null) ) {
                       MapMarkers my_markers = new MapMarkers(snapshot.data["rock"], context);
                       List<Marker> markers=my_markers.markers;
-
-
-
                     return (
                         FlutterMap(
                         options: MapOptions(
                           plugins: [
                             ZoomButtonsPlugin(),
-
+                            PopupMarkerPlugin()
                           ],
+                          interactive: true,
+                          onTap: (_) => setState(() {
+                              _popupLayerController.hidePopup();
+                              myState.ClearRockItem();
+                            }),
                           center: LatLng(53.5, 19.09),
                           zoom: 5.0,
         //                  maxZoom: 5.0,
@@ -94,7 +95,19 @@ class MapPage extends State<MyTestPage> {
                               tileProvider: CachedNetworkTileProvider()
                           ),
                           MarkerLayerOptions(markers: markers),
-                          ZoomButtonsPluginOption(
+                          PopupMarkerLayerOptions(
+                            markers: markers,
+                            popupController: _popupLayerController,
+                            popupBuilder: (_, Marker marker) {
+                              if (marker is RockMarker)
+                                {
+                                    return markerPopup(marker);
+                                }
+                              return Card(child: const Text('NotImplemented: Not a RockMarker'));
+                            },
+                          ),
+
+                         ZoomButtonsPluginOption(
                             minZoom: 1,
                             maxZoom: 19,
                             mini: true,
@@ -114,11 +127,10 @@ class MapPage extends State<MyTestPage> {
             ),
             RockWidget()
 
+
           ],
         ),
       ),
     );
   }
-
 }
-

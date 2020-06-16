@@ -12,7 +12,7 @@ class MapMarkers
   appState myState;
   MapMarkers(List<Item> rockDetails,  context )
   {
-    this.myState=Provider.of<appState>(context, listen: true);
+    //this.myState=Provider.of<appState>(context, listen: true);
     for(var rock in  rockDetails)
       {
         this.markers.add(CreateMarker(rock));
@@ -21,24 +21,39 @@ class MapMarkers
   }
   Marker CreateMarker(Item rockData)
   {
-    return Marker(
-        width: 80.0,
-        height: 80.0,
-        point:  new LatLng(double.parse(rockData.lat), double.parse(rockData.lng)),
-        builder: (ctx) => Container(
-          child: GestureDetector(
-            onTap: () {
-              this.myState.url=rockData.url;
-              this.myState.rockItem=rockData;
+    return RockMarker(rock: Rock(
+      RockData: rockData,
+      )
+    );
 
-            },
-            child: Icon(
+  }
+
+}
+class Rock {
+  static const double size = 25;
+  Rock(
+      {this.RockData
+      });
+  final Item RockData;
+
+
+}
+
+class RockMarker extends Marker {
+  RockMarker({@required this.rock})
+      : super(
+    anchorPos: AnchorPos.align(AnchorAlign.top),
+    height: Rock.size,
+    width: Rock.size,
+    point:  new LatLng(double.parse(rock.RockData.lat), double.parse(rock.RockData.lng)),
+    builder: (BuildContext ctx) =>
+            Icon(
               Icons.crop_free,
               color: Colors.pink,
               size: 30.0,
               semanticLabel: 'Rock pointer',
-            )),
-        ));
-  }
+            )
+  );
 
+  final Rock rock;
 }

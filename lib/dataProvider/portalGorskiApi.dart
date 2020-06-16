@@ -1,6 +1,8 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert' show json;
 import 'dart:developer';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter/foundation.dart';
 
 //class myNewTopoApiData {
 //  List<Item> rocks = new List();
@@ -36,9 +38,17 @@ Future<Map<String, List<Item>>> fetchData() async
   String url_podhale = 'http://topo.portalgorski.pl/topo/json/get/id/930';
 
 
-  return await callTopoApi(url_sudety);
+
+  //return await callTopoApi(url_sudety);
+  return await  loadAsset();
 }
 
+Future<Map<String, List<Item>>> loadAsset() async {
+  final response =  await rootBundle.loadString('assets/rockApiData.json');
+  Map<String, List<Item>> out;
+  out=groupItemsByType(json.decode(response));
+  return out;
+}
 
 Future<Map<String, List<Item>>> callTopoApi(String url) async
 {
@@ -60,8 +70,10 @@ Map<String, List<Item>> groupItemsByType(Map<String, dynamic> json) {
     "rock": List<Item>(),
     "sector": List<Item>()
   };
-  List<dynamic> results = json['results'];
-  results.forEach((item) {
+
+
+   for (Map<String,dynamic> item in json.values)
+   {
     Item i = Item.getItemFromJson(item);
     if (i.type == "area" ) {
       sortedItems["area"].add(i);
@@ -75,7 +87,7 @@ Map<String, List<Item>> groupItemsByType(Map<String, dynamic> json) {
     if (i.type == "area_simple") {
       sortedItems["area_simple"].add(i);
     }
-  });
+  }
   return sortedItems;
 }
 
@@ -169,7 +181,11 @@ class Rock extends Item {
   final String type;
   final String url;
   final String img;
-  Rock(this.id, this.lat, this.lng, this.title,this.description,this.type,this.url,this.img);
+  final String rockType;
+  final String childSafe;
+  final String hight;
+  final Map<String,dynamic> routesStats;
+  Rock(this.id, this.lat, this.lng, this.title,this.description,this.type,this.url,this.img, this.rockType, this.childSafe,this.hight, this.routesStats);
   Rock.fromJson(Map<String, dynamic> json)
     : id = json["id"],
       lat = json["lat"],
@@ -178,7 +194,11 @@ class Rock extends Item {
       description = json['description'],
       type = json['type'],
       url = json['url'],
-      img = json['img'];
+      img = json['img'],
+      rockType = json['rockType '],
+      childSafe=json['childSafe'],
+      hight = json['hight'],
+      routesStats = json['routesStats'];
 }
 
 class AreaSimple extends Item {

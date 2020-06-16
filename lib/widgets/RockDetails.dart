@@ -27,7 +27,7 @@ class RockDetails extends StatelessWidget {
         child: ListView(
             children:[
 
-              RockStats(context, rockData.url),
+              RockStats(context, rockData),
               RaisedButton(
                 onPressed: () => MapsLauncher.launchCoordinates(
                     double.parse(rockData.lat), double.parse(rockData.lng )),
@@ -65,9 +65,10 @@ Widget RockGpsDetails (BuildContext context, String gps_lat, String gps_lng ){
 }
 
 
-Widget RockStats(context, String url){
+Widget RockStats(context, Rock rockItem){
   return FutureBuilder<List<Tuple2<String, String>>>(
-      future: _getRockStatsFromHtml(url),
+
+      future: _getRockStatsFromRockItem(rockItem),
       builder: (context,   snapshot) {
         if (snapshot.hasData) {
           return Column(
@@ -155,22 +156,18 @@ List<Widget> _buildChildRouteElement(BuildContext context, List<Tuple2<String, S
 }
 
 
-
- Future<List<Tuple2<String, String>>> _getRockStatsFromHtml(String url) async {
-
-  const baseUrl = "http://topo.portalgorski.pl/";
-  String urlToLoad = baseUrl+url;
-  final response = await http.Client().get(Uri.parse(urlToLoad)) ;
+Future<List<Tuple2<String, String>>> _getRockStatsFromRockItem(Rock rockItem) async {
   List<Tuple2<String, String>> routes = List();
-
-  if (response.statusCode ==200)
+  for (var item in rockItem.routesStats.keys)
     {
-      var document = parse(response.body);
-      return _parseRockStatsFromHtml(document);
-
+      var current_route =Tuple2<String, String>(item, rockItem.routesStats[item]);
+      routes.add(current_route);
     }
-  return  routes;
+  return routes;
+
+
 }
+
 _launchURL(BuildContext context,String url) async {
   const baseUrl = "http://topo.portalgorski.pl/";
   String urlToLoad = baseUrl+url;
@@ -180,21 +177,4 @@ _launchURL(BuildContext context,String url) async {
   } else {
     throw 'Could not launch $urlToLoad';
   }
-}
-_parseRockStatsFromHtml(dom.Document document)
-{
-  //dodac mape
-  // klucz jako elementy statsow
-  // np. routes dla ponizszego
-  // np. rockType dla typu itp
-  var DomElements = document.getElementsByClassName("lnk");
-  List<Tuple2<String, String>> Routes = new List();
-  for (var item in DomElements )
-    {
-        var item_tmp=item.text.split(" ");
-        var current_route =Tuple2<String, String>(item_tmp[0], item_tmp[1]);
-        Routes.add(current_route);
-
-    }
-  return Routes;
 }
