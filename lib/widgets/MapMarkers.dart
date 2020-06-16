@@ -21,7 +21,7 @@ class MapMarkers
   }
   Marker CreateMarker(Item rockData)
   {
-    return RockMarker(rock: Rock(
+    return RockMarker(rock: RockContainer(
       RockData: rockData,
       )
     );
@@ -29,9 +29,9 @@ class MapMarkers
   }
 
 }
-class Rock {
+class RockContainer {
   static const double size = 25;
-  Rock(
+  RockContainer(
       {this.RockData
       });
   final Item RockData;
@@ -43,8 +43,8 @@ class RockMarker extends Marker {
   RockMarker({@required this.rock})
       : super(
     anchorPos: AnchorPos.align(AnchorAlign.top),
-    height: Rock.size,
-    width: Rock.size,
+    height: RockContainer.size,
+    width: RockContainer.size,
     point:  new LatLng(double.parse(rock.RockData.lat), double.parse(rock.RockData.lng)),
     builder: (BuildContext ctx) =>
             Icon(
@@ -55,5 +55,5 @@ class RockMarker extends Marker {
             )
   );
 
-  final Rock rock;
+  final RockContainer rock;
 }

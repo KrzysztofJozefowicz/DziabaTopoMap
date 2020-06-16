@@ -4,29 +4,6 @@ import 'dart:developer';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/foundation.dart';
 
-//class myNewTopoApiData {
-//  List<Item> rocks = new List();
-//  List<Item> areas = new List();
-//  List<Item> sectors = new List();
-//  List<Item> area_simple = new List();
-//  myNewTopoApiData()
-//  {
-//    myNewTopoApi apiResponse = new myNewTopoApi();
-//    this.populateWithData(apiResponse);
-//  }
-//
-//
-//  Future<void> populateWithData(myNewTopoApi apiResponse) async
-//  {
-//    apiResponse.addData(apiResponse.sudetyUrl).then((value) {
-//        this.rocks = new List();
-//        for (var element in  apiResponse.rocks)
-//        {
-//          this.rocks.add(element);
-//        }
-//      });
-//  }
-//}
 
 Future<Map<String, List<Item>>> fetchData() async
 {
