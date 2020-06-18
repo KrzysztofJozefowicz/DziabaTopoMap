@@ -45,7 +45,7 @@ class _markerPopupState extends State<markerPopup> {
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Container(
-        constraints: BoxConstraints(minWidth: 100, maxWidth: 200),
+        constraints: BoxConstraints(minWidth: 50, maxWidth: 200),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -57,6 +57,7 @@ class _markerPopupState extends State<markerPopup> {
   }
   List<Widget> routesColorBar(BuildContext context)
   {
+    var myState = Provider.of<appState>(context, listen: true);
     List<Widget> RouteStatsStripe = new List();
     RouteStatsStripe.add(Text(
       _marker.rock.RockData.title,
@@ -79,6 +80,23 @@ class _markerPopupState extends State<markerPopup> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: _createBoxLegends(_marker))));
+    RouteStatsStripe.add(Container(
+        child: InkWell(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text("Add to favorites"),
+            ],
+          ),
+          onTap: () => setState(() {
+            //if in favorites , remove from favirites
+            // if not in favorites add
+            // color background
+            myState.ClearRockItem();
+          }),
+        )
+
+    ));
 
 
 
