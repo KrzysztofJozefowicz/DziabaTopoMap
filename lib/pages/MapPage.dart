@@ -13,6 +13,7 @@ import 'package:latlong/latlong.dart';
 import 'dart:async';
 import 'dart:developer';
 import '../widgets/markerPopup.dart';
+import '../widgets/MapFilters.dart';
 
 class MyTestPage extends StatefulWidget {
   static const String route = 'MyTest';
@@ -61,14 +62,15 @@ class MapPage extends State<MyTestPage> {
         padding: EdgeInsets.all(8.0),
         child: Column(
           children: [
-
+            MapFilters(),
             Flexible(
               child:
               FutureBuilder<Map<String, List<Item>>> (
                 future: futureData,
                 builder: (context, snapshot) {
                   if (snapshot.hasData && (snapshot.data["rock"].length != null) ) {
-                      MapMarkers my_markers = new MapMarkers(snapshot.data["rock"], context);
+                      myState.PopulateRocks(snapshot.data["rock"]);
+                      MapMarkers my_markers = new MapMarkers(snapshot.data["rock"], context,myState.FilterState, myState.FilterContent);
                       List<Marker> markers=my_markers.markers;
                     return (
                         FlutterMap(
