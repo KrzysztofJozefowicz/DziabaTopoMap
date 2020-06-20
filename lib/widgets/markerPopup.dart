@@ -7,20 +7,23 @@ import 'package:flutter_map/flutter_map.dart';
 import '../widgets/MapMarkers.dart';
 import 'package:provider/provider.dart';
 import '../dataProvider/portalGorskiApi.dart';
+import 'package:latlong/latlong.dart';
 
 class markerPopup extends StatefulWidget {
   final Marker marker;
+  final MapController mapController;
 
-  markerPopup(this.marker, {Key key}) : super(key: key);
+  markerPopup(this.marker,this.mapController, {Key key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _markerPopupState(this.marker);
+  State<StatefulWidget> createState() => _markerPopupState(this.marker, this.mapController);
 }
 
 class _markerPopupState extends State<markerPopup> {
   final RockMarker _marker;
+  final MapController _mapController;
 
-  _markerPopupState(this._marker);
+  _markerPopupState(this._marker, this._mapController);
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +39,9 @@ class _markerPopupState extends State<markerPopup> {
             ],
           ),
           onTap: () => setState(() {
+            LatLng latlng = LatLng(double.parse(_marker.rock.RockData.lat),double.parse(_marker.rock.RockData.lng));
+            double zoom = 10.0; //the zoom you want
+            _mapController.move(latlng,zoom);
             myState.rockItem = _marker.rock.RockData;
           }),
         ),
@@ -86,6 +92,7 @@ class _markerPopupState extends State<markerPopup> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: _createBoxLegends(_marker))));
     RouteStatsStripe.add(_buildFavoriteBar(myState, _marker.rock.RockData.id));
+
 
     return RouteStatsStripe;
   }

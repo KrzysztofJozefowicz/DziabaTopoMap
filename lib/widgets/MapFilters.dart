@@ -28,15 +28,15 @@ class MapFiltersWidget extends State<MapFilters> {
     return Container(
         color: Colors.transparent,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween ,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             FavoriteButton(),
             ShowRocksWithRouteLevel('III', "includeWithIII"),
             ShowRocksWithRouteLevel('IV', "includeWithIV"),
             ShowRocksWithRouteLevel('V', "includeWithV"),
             ShowRocksWithRouteLevel('VI', "includeWithVI"),
-            Text("Trad_only"),
-            Text("Sport_only")
+            //Text("Trad_only"),
+            // Text("Sport_only")
           ],
         ));
   }
@@ -97,26 +97,27 @@ class _ShowRocksWithRouteLevelState extends State<ShowRocksWithRouteLevel> {
   Widget build(BuildContext context) {
     var myState = Provider.of<appState>(context, listen: true);
     Color boxColor = Colors.grey;
-    if (myState.FilterState[widget.filterName] == true)
-      {boxColor=    routeToColorMappings[myState.FilterContent[widget.filterName]];}
+    if (myState.FilterState[widget.filterName] == true) {
+      boxColor = routeToColorMappings[myState.FilterContent[widget.filterName]];
+    }
 
     return Consumer<appState>(builder: (context, _filterState, _) {
       return InkWell(
-          child:
-          Stack(
+          child: Stack(
             children: <Widget>[
               SizedBox(
                   width: 42.0,
                   height: 42.0,
-                  child: DecoratedBox(decoration: BoxDecoration(color: boxColor))
-                //child: Text(route+":"+routesCount[route].toString()),
-              ),
-              Text(widget.fieldName),
-
+                  child:
+                      DecoratedBox(decoration: BoxDecoration(color: boxColor))
+                  //child: Text(route+":"+routesCount[route].toString()),
+                  ),
+              SizedBox(
+                  width: 42.0,
+                  height: 42.0,
+                  child: Center(child: Text(widget.fieldName))),
             ],
           ),
-
-
           onTap: () => setState(() {
                 bool currentFilterRouteState =
                     !myState.FilterState[widget.filterName];

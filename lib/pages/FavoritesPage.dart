@@ -3,6 +3,7 @@ import '../states/appState.dart';
 import '../widgets/drawer.dart';
 import 'package:provider/provider.dart';
 import '../dataProvider/portalGorskiApi.dart';
+import '../widgets/RockWidget.dart';
 import 'dart:async';
 import 'dart:developer';
 
@@ -34,20 +35,31 @@ class FavoritesPage extends State<Favorites> {
         drawer: buildDrawer(context, Favorites.route),
         body: Padding(
             padding: EdgeInsets.all(8.0),
-            child: Column(children: [
-              Flexible(child: ListView(children: _listFavorites(myState)))
+            child: Column(
+                children: [
+                    Flexible(child: ListView(children: _listFavorites(context,myState))),
+                    RockWidget()
             ])));
   }
 
-  List<Widget> _listFavorites(appState myState) {
+  List<Widget> _listFavorites(BuildContext context,appState myState) {
     List<Widget> favoriteList = new List();
 
     for (var entry in myState.favorites) {
       Item favoriteRock = _getItemById(myState, entry);
       if (favoriteRock != null) {
-        favoriteList.add(Text(favoriteRock.title));
+        favoriteList.add(
+            InkWell(
+                child: Text(favoriteRock.title),
+                onTap: () => setState(() {
+                  if (myState.rockItem != favoriteRock){
+                  myState.rockItem = favoriteRock;}
+                  else
+                    {myState.rockItem=null;}
+                }))
+
+        );}
       }
-    }
     return favoriteList;
   }
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:topo_map/pages/favoritesLIst.dart';
+import 'package:topo_map/pages/FavoritesPage.dart';
 
 import './pages/MapPage.dart';
 import './states/appState.dart';

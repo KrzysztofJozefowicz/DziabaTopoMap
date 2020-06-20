@@ -9,7 +9,6 @@ import 'package:provider/provider.dart';
 import '../dataProvider/portalGorskiApi.dart';
 import '../widgets/MapMarkers.dart';
 import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
-import 'package:latlong/latlong.dart';
 import 'dart:async';
 import 'dart:developer';
 import '../widgets/markerPopup.dart';
@@ -38,7 +37,7 @@ class MapPage extends State<MyTestPage> {
   @override
   Widget build(BuildContext context) {
     var myState = Provider.of<appState>(context, listen: true);
-
+    MapController _mapctl = MapController();
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(actions: <Widget>[
@@ -69,11 +68,13 @@ class MapPage extends State<MyTestPage> {
                         snapshot.data["rock"],
                         context,
                         myState.FilterState,
-                        myState.FilterContent);
+                        myState.FilterContent,
+                        );
                     List<Marker> markers = my_markers.markers;
                     return Consumer<appState>(
                         builder: (context, _filterState, _) {
                       return (FlutterMap(
+                        mapController: _mapctl,
                         options: MapOptions(
                           plugins: [ZoomButtonsPlugin(), PopupMarkerPlugin()],
                           interactive: true,
@@ -98,7 +99,7 @@ class MapPage extends State<MyTestPage> {
                             popupController: _popupLayerController,
                             popupBuilder: (_, Marker marker) {
                               if (marker is RockMarker) {
-                                return markerPopup(marker);
+                                return markerPopup(marker,_mapctl);
                               }
                               return Card(
                                   child: const Text(

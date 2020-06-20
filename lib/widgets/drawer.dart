@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../pages/favoritesLIst.dart';
+import '../pages/FavoritesPage.dart';
 import '../pages/MapPage.dart';
 
 
