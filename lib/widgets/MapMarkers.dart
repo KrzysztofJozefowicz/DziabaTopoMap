@@ -11,7 +11,10 @@ class MapMarkers {
 
   MapMarkers(Map<String, dynamic> rockDetails, context,
       Map<String, bool> filtersState, Map<String, dynamic> filtersContent) {
+
     Map<String,Rock> rocks = rockDetails;
+    log(rocks["246"].title);
+    log(rocks["246"].routesStatsSimplified.toString());
     List<String> rockIdToDisplay = new List();
     rockIdToDisplay.addAll(rocks.keys);
 
@@ -33,7 +36,6 @@ class MapMarkers {
       if (filtersState[filter] == true) {
         String currentRouteLevel = filtersContent[filter];
         for (var rock in rocks.values) {
-          String routeSelector=filtersContent[filter];
           if (rock.routesStatsSimplified[currentRouteLevel] == 0)
             {
               rockIdToDisplay.remove(rock.id);
