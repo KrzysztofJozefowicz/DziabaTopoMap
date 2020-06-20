@@ -37,7 +37,7 @@ class MapPage extends State<MyTestPage> {
   @override
   Widget build(BuildContext context) {
     var myState = Provider.of<appState>(context, listen: true);
-    MapController _mapctl = MapController();
+    MapController mapController = MapController();
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(actions: <Widget>[
@@ -56,7 +56,7 @@ class MapPage extends State<MyTestPage> {
         padding: EdgeInsets.all(8.0),
         child: Column(
           children: [
-            MapFilters(),
+            MapFilters(mapController),
             Flexible(
               child: FutureBuilder<Map<String, Map<String, Item>>>(
                 future: futureData,
@@ -74,7 +74,7 @@ class MapPage extends State<MyTestPage> {
                     return Consumer<appState>(
                         builder: (context, _filterState, _) {
                       return (FlutterMap(
-                        mapController: _mapctl,
+                        mapController: mapController,
                         options: MapOptions(
                           plugins: [ZoomButtonsPlugin(), PopupMarkerPlugin()],
                           interactive: true,
@@ -99,7 +99,7 @@ class MapPage extends State<MyTestPage> {
                             popupController: _popupLayerController,
                             popupBuilder: (_, Marker marker) {
                               if (marker is RockMarker) {
-                                return markerPopup(marker,_mapctl);
+                                return markerPopup(marker,mapController);
                               }
                               return Card(
                                   child: const Text(

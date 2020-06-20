@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong/latlong.dart';
 import '../states/appState.dart';
 import 'package:provider/provider.dart';
 import '../dataProvider/portalGorskiApi.dart';
@@ -8,14 +10,21 @@ import 'dart:async';
 import 'dart:developer';
 
 class MapFilters extends StatefulWidget {
+  final MapController mapController;
+
+  MapFilters(this.mapController, {Key key}) : super(key: key);
+
   @override
   MapFiltersWidget createState() {
-    return MapFiltersWidget();
+    return MapFiltersWidget(this.mapController);
   }
 }
 
 class MapFiltersWidget extends State<MapFilters> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final MapController mapController;
+
+  MapFiltersWidget(this.mapController);
 
   @override
   void initState() {
@@ -30,7 +39,7 @@ class MapFiltersWidget extends State<MapFilters> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            FavoriteButton(),
+            FavoriteButton(mapController),
             ShowRocksWithRouteLevel('III', "includeWithIII"),
             ShowRocksWithRouteLevel('IV', "includeWithIV"),
             ShowRocksWithRouteLevel('V', "includeWithV"),
@@ -43,11 +52,20 @@ class MapFiltersWidget extends State<MapFilters> {
 }
 
 class FavoriteButton extends StatefulWidget {
+  final MapController mapController;
+
+  FavoriteButton(this.mapController, {Key key}) : super(key: key);
+
   @override
-  State<StatefulWidget> createState() => _FavoriteButtonState();
+  State<StatefulWidget> createState() =>
+      _FavoriteButtonState(this.mapController);
 }
 
 class _FavoriteButtonState extends State<FavoriteButton> {
+  final MapController mapController;
+
+  _FavoriteButtonState(this.mapController);
+
   @override
   Widget build(BuildContext context) {
     var myState = Provider.of<appState>(context, listen: true);
@@ -69,6 +87,20 @@ class _FavoriteButtonState extends State<FavoriteButton> {
         onTap: () => setState(() {
           bool currentFavoriteState = !myState.FilterState["showOnlyFavorites"];
           myState.SetFilterState("showOnlyFavorites", currentFavoriteState);
+          if (currentFavoriteState == true) {
+            List<LatLng> mapBounds = new List();
+            for (var element in myState.favorites) {
+              Item rock = myState.GetRockById(element);
+              mapBounds.add(
+                LatLng(double.parse(rock.lat), double.parse(rock.lng)),
+              );
+            }
+            var fitOptions =
+                new FitBoundsOptions(padding: EdgeInsets.all(75.0));
+            mapController.fitBounds(LatLngBounds.fromPoints(mapBounds),
+                options: fitOptions);
+          }
+
         }),
       );
     });

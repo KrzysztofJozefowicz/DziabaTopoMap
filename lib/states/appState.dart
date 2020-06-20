@@ -6,7 +6,7 @@ class  appState extends ChangeNotifier {
   String _url = "";
   Item  _rockItem;
   Color favColor = Colors.transparent;
-  var favorites =  <String>{""};
+  List<String> favorites = new List();
   Map<String,Item> _rocks = new Map();
   Map<String,bool> _filterState = _defaultFilterState();
   Map<String,dynamic> _filterContent = _defaultFilterContent() ;

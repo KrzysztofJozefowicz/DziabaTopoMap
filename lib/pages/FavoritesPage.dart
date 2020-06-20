@@ -46,11 +46,11 @@ class FavoritesPage extends State<Favorites> {
     List<Widget> favoriteList = new List();
 
     for (var entry in myState.favorites) {
-      Item favoriteRock = _getItemById(myState, entry);
+      Item favoriteRock =  myState.GetRockById(entry);
       if (favoriteRock != null) {
         favoriteList.add(
             InkWell(
-                child: Text(favoriteRock.title),
+                child: Text(favoriteRock.title+" "+favoriteRock.lat+" "+favoriteRock.lng),
                 onTap: () => setState(() {
                   if (myState.rockItem != favoriteRock){
                   myState.rockItem = favoriteRock;}
@@ -63,7 +63,4 @@ class FavoritesPage extends State<Favorites> {
     return favoriteList;
   }
 
-  Item _getItemById(appState myState, String id) {
-    return myState.GetRockById(id);
-  }
 }
