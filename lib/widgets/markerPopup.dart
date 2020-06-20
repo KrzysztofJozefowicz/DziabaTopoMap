@@ -27,7 +27,7 @@ class _markerPopupState extends State<markerPopup> {
     var myState = Provider.of<appState>(context, listen: true);
     return Consumer<appState>(builder: (context, favColor, _) {
       return Card(
-        color: myState.favColor,
+        color: Colors.grey,
         child: InkWell(
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -91,17 +91,15 @@ class _markerPopupState extends State<markerPopup> {
   }
 
   Widget _buildFavoriteBar(appState myState, String id) {
-    return Container(
-        color: myState.favColor,
-        child: InkWell(
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[_isInFavorite(myState, id)],
+        return InkWell(
+          child: Container(
+            color: myState.favColor,
+            child:  _isInFavorite(myState, id),
           ),
           onTap: () => setState(() {
             if (myState.IsInFavorites(id)) {
               myState.RemoveFromFavorites(id);
-              myState.favColor = Colors.transparent;
+              myState.favColor = Colors.grey;
               myState.FilterContent["favorites"]=myState.favorites;
 
             } else {
@@ -111,14 +109,17 @@ class _markerPopupState extends State<markerPopup> {
 
             }
           }),
-        ));
+        );
   }
 
   Widget _isInFavorite(appState myState, String id) {
     if (myState.IsInFavorites(id)) {
-      return Text("Tap to remove from favorites");
+      return Text("Tap to remove from favorites",
+          textAlign: TextAlign.center);
     } else {
-      return Text("Add to favorites");
+      return Text("Add to favorites",
+          textAlign: TextAlign.center
+      );
     }
   }
 
