@@ -1,4 +1,4 @@
-import 'dart:ffi';
+
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -42,20 +42,7 @@ class _markerPopupState extends State<markerPopup> {
       );
     });
 
-//    return Card(
-//      color: ,
-//      child: InkWell(
-//        child: Row(
-//          mainAxisSize: MainAxisSize.min,
-//          children: <Widget>[
-//            _cardDescription(context),
-//          ],
-//        ),
-//        onTap: () => setState(() {
-//          myState.rockItem = _marker.rock.RockData;
-//        }),
-//      ),
-//    );
+
   }
 
   Widget _cardDescription(BuildContext context) {
@@ -138,13 +125,13 @@ class _markerPopupState extends State<markerPopup> {
   _createBoxLegends(RockMarker rockData) {
     List<Widget> routesLegendsStripe = new List();
     Rock rock = rockData.rock.RockData;
-    Map<String, int> routesCount = _countRouts(rock);
+    Map<String, int> routesCount = rock.routesStatsSimplified;
 
     for (var route in routesCount.keys) {
       routesLegendsStripe.add(SizedBox(
         width: 42.0,
         height: 42.0,
-        child: Text(route + ":" + routesCount[route].toString()),
+        child: Text(route + ":" + rock.routesStatsSimplified[route].toString()),
       ));
     }
 
@@ -154,7 +141,6 @@ class _markerPopupState extends State<markerPopup> {
   _createColorBoxes(RockMarker rockData) {
     List<Widget> routesBoxesStripe = new List();
     Rock rock = rockData.rock.RockData;
-    Map<String, int> routesCount = _countRouts(rock);
     Map<String, Color> routeToColorMappings = {
       "III": Colors.lightGreen,
       "IV": Colors.cyan,
@@ -162,19 +148,19 @@ class _markerPopupState extends State<markerPopup> {
       "VI": Colors.red
     };
 
-    for (var route in routesCount.keys) {
+    for (var route in rock.routesStatsSimplified.keys) {
       double height = 1.0;
       Color color = routeToColorMappings[route];
-      if (routesCount[route] > 0 && routesCount[route] < 3) {
+      if (rock.routesStatsSimplified[route] > 0 && rock.routesStatsSimplified[route] < 3) {
         height = 10.0;
       }
-      if (routesCount[route] >= 3 && routesCount[route] < 6) {
+      if (rock.routesStatsSimplified[route] >= 3 && rock.routesStatsSimplified[route] < 6) {
         height = 20.0;
       }
-      if (routesCount[route] >= 6 && routesCount[route] < 10) {
+      if (rock.routesStatsSimplified[route] >= 6 && rock.routesStatsSimplified[route] < 10) {
         height = 30.0;
       }
-      if (routesCount[route] >= 10) {
+      if (rock.routesStatsSimplified[route] >= 10) {
         height = 42.0;
       }
 
@@ -182,35 +168,10 @@ class _markerPopupState extends State<markerPopup> {
           width: 42.0,
           height: height,
           child: DecoratedBox(decoration: BoxDecoration(color: color))
-          //child: Text(route+":"+routesCount[route].toString()),
           ));
     }
     return routesBoxesStripe;
   }
 
-  Map<String, int> _countRouts(Rock rock) {
-    Map<String, int> routesCount = {"III": 0, 'IV': 0, 'V': 0, 'VI': 0};
-    for (var element in rock.routesStats.keys) {
-      if (element.contains(new RegExp(r'II.*')) ||
-          element.contains(new RegExp(r'III.*'))) {
-        routesCount['III'] += int.parse(rock.routesStats[element]);
-        continue;
-      }
 
-      if (element.contains(new RegExp(r'IV.*'))) {
-        routesCount['IV'] += int.parse(rock.routesStats[element]);
-        continue;
-      }
-
-      if (element.contains(new RegExp(r'VI.*'))) {
-        routesCount['VI'] += int.parse(rock.routesStats[element]);
-        continue;
-      }
-      if (element.contains(new RegExp(r'V.*'))) {
-        routesCount['V'] += int.parse(rock.routesStats[element]);
-        continue;
-      }
-    }
-    return routesCount;
-  }
 }

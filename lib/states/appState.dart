@@ -7,7 +7,7 @@ class  appState extends ChangeNotifier {
   Item  _rockItem;
   Color favColor = Colors.transparent;
   var favorites =  <String>{""};
-  List<Item> _rocks = new List();
+  Map<String,Item> _rocks = new Map();
   Map<String,bool> _filterState = _defaultFilterState();
   Map<String,dynamic> _filterContent = _defaultFilterContent() ;
   Map<String,bool> get FilterState => _filterState;
@@ -15,12 +15,14 @@ class  appState extends ChangeNotifier {
   void SetFilterState(String key, bool value)
   {
     _filterState[key] = value;
+    notifyListeners();
   }
 
   Map<String,dynamic> get FilterContent =>_filterContent ;
   void SetFilterContent(String key, dynamic value)
   {
     _filterContent[key] = value;
+    notifyListeners();
   }
 
   String get url => _url;
@@ -87,23 +89,16 @@ class  appState extends ChangeNotifier {
     }
     return false;
   }
-  void PopulateRocks(List<Item> rocksFromApi)
+  void PopulateRocks(Map<String,Item> rocksFromApi)
   {
     _rocks = rocksFromApi;
   }
 
   Item GetRockById(String id)
   {
-    for (var element in _rocks)
-      {
-        if (element.id == id )
-          {
-            return element;
-          }
-      }
-    //return null;
+    return _rocks[id];
   }
-  List<Item> get rocks => _rocks;
+  Map<String,Item> get rocks => _rocks;
 
 
 
@@ -111,12 +106,20 @@ class  appState extends ChangeNotifier {
   {
     Map<String,bool> filterState = new Map();
     filterState["showOnlyFavorites"]=false;
+    filterState["includeWithIII"]=false;
+    filterState["includeWithIV"]=false;
+    filterState["includeWithV"]=false;
+    filterState["includeWithVI"]=false;
     return (filterState);
   }
   static Map<String,dynamic> _defaultFilterContent()
   {
     Map<String,dynamic> filterContent= new Map();
     filterContent["favorites"]=new List();
+    filterContent["includeWithIII"]="III";
+    filterContent["includeWithIV"]="IV";
+    filterContent["includeWithV"]="V";
+    filterContent["includeWithVI"]="VI";
     return (filterContent);
   }
 }

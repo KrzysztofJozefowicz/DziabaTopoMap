@@ -5,7 +5,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/foundation.dart';
 
 
-Future<Map<String, List<Item>>> fetchData() async
+Future<Map<String, Map<String,Item>>> fetchData() async
 {
   String url_sudety = 'http://topo.portalgorski.pl/topo/json/get/id/634';
   String url_beskidy = 'http://topo.portalgorski.pl/topo/json/get/id/737';
@@ -20,18 +20,16 @@ Future<Map<String, List<Item>>> fetchData() async
   return await  loadAsset();
 }
 
-Future<Map<String, List<Item>>> loadAsset() async {
+Future<Map<String, Map<String,Item>>> loadAsset() async {
   final response =  await rootBundle.loadString('assets/rockApiData.json');
-  Map<String, List<Item>> out;
-  out=groupItemsByType(json.decode(response));
-  return out;
+  return groupItemsByType(json.decode(response));
 }
 
-Future<Map<String, List<Item>>> callTopoApi(String url) async
+Future<Map<String, Map<String,Item>>> callTopoApi(String url) async
 {
   final response =  await http.get(url);
   if (response.statusCode == 200) {
-    Map<String, List<Item>> out;
+    Map<String, Map<String,Item>> out;
     out=groupItemsByType(json.decode(response.body));
     return out;}
   else {
@@ -40,12 +38,12 @@ Future<Map<String, List<Item>>> callTopoApi(String url) async
 
 }
 
-Map<String, List<Item>> groupItemsByType(Map<String, dynamic> json) {
-  Map<String, List<Item>> sortedItems = {
-    "area": List<Item>(),
-    "area_simple": List<Item>(),
-    "rock": List<Item>(),
-    "sector": List<Item>()
+Map<String, Map<String,Item>> groupItemsByType(Map<String, dynamic> json) {
+  Map<String, Map<String,Item>> sortedItems = {
+    "area": Map<String,Area>(),
+    "area_simple": Map<String,AreaSimple>(),
+    "rock": Map<String,Rock>(),
+    "sector": Map<String,Sector>()
   };
 
 
@@ -53,16 +51,16 @@ Map<String, List<Item>> groupItemsByType(Map<String, dynamic> json) {
    {
     Item i = Item.getItemFromJson(item);
     if (i.type == "area" ) {
-      sortedItems["area"].add(i);
+      sortedItems["area"][i.id]=i;
     }
     if (i.type == "rock") {
-      sortedItems["rock"].add(i);
+      sortedItems["rock"][i.id]=i;
     }
     if (i.type == "sector") {
-      sortedItems["sector"].add(i);
+      sortedItems["sector"][i.id]=i;
     }
     if (i.type == "area_simple") {
-      sortedItems["area_simple"].add(i);
+      sortedItems["area_simple"][i.id]=i;
     }
   }
   return sortedItems;
@@ -162,7 +160,8 @@ class Rock extends Item {
   final String childSafe;
   final String hight;
   final Map<String,dynamic> routesStats;
-  Rock(this.id, this.lat, this.lng, this.title,this.description,this.type,this.url,this.img, this.rockType, this.childSafe,this.hight, this.routesStats);
+  final Map<String,int>  routesStatsSimplified;
+  Rock(this.id, this.lat, this.lng, this.title,this.description,this.type,this.url,this.img, this.rockType, this.childSafe,this.hight, this.routesStats, this.routesStatsSimplified);
   Rock.fromJson(Map<String, dynamic> json)
     : id = json["id"],
       lat = json["lat"],
@@ -175,7 +174,8 @@ class Rock extends Item {
       rockType = json['rockType '],
       childSafe=json['childSafe'],
       hight = json['hight'],
-      routesStats = json['routesStats'];
+      routesStats = json['routesStats'],
+      routesStatsSimplified = _countRoutes(json['routesStats']);
 }
 
 class AreaSimple extends Item {
@@ -198,5 +198,31 @@ class AreaSimple extends Item {
         url = json['url'],
         img = json['img'];
 
+}
+
+Map<String, int> _countRoutes(Map<String,dynamic> routesStats) {
+  Map<String, int> routesCount = {"III": 0, 'IV': 0, 'V': 0, 'VI': 0};
+  for (var element in routesStats.keys) {
+    if (element.contains(new RegExp(r'II.*')) ||
+        element.contains(new RegExp(r'III.*'))) {
+      routesCount['III'] += int.parse(routesStats[element]);
+      continue;
+    }
+
+    if (element.contains(new RegExp(r'IV.*'))) {
+      routesCount['IV'] += int.parse(routesStats[element]);
+      continue;
+    }
+
+    if (element.contains(new RegExp(r'VI.*'))) {
+      routesCount['VI'] += int.parse(routesStats[element]);
+      continue;
+    }
+    if (element.contains(new RegExp(r'V.*'))) {
+      routesCount['V'] += int.parse(routesStats[element]);
+      continue;
+    }
+  }
+  return routesCount;
 }
 
