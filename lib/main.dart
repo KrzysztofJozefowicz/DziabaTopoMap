@@ -4,15 +4,18 @@ import 'package:topo_map/pages/FavoritesPage.dart';
 
 import './pages/MapPage.dart';
 import './states/appState.dart';
+import 'package:global_configuration/global_configuration.dart';
 
-
-
-void main() => runApp(
-  MultiProvider(
-    providers: [ChangeNotifierProvider(builder: (context) => appState())],
-    child: MyApp(),
-  ),
-);
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await GlobalConfiguration().loadFromPath("assets/rockApiData.json");
+  runApp(
+    MultiProvider(
+      providers: [ChangeNotifierProvider(builder: (context) => appState())],
+      child: MyApp(),
+    ),
+  );
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -23,11 +26,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: mapBoxBlue,
       ),
-      home: MyTestPage(),
+      home: TopoMap(),
       routes: <String, WidgetBuilder>{
-        MyTestPage.route: (context) => MyTestPage(),
+        TopoMap.route: (context) => TopoMap(),
         Favorites.route: (context) => Favorites(),
-
       },
     );
   }

@@ -14,9 +14,9 @@ Drawer buildDrawer(BuildContext context, String currentRoute) {
         ),
         ListTile(
           title: const Text('Map'),
-          selected: currentRoute == MyTestPage.route,
+          selected: currentRoute == TopoMap.route,
           onTap: () {
-            Navigator.pushReplacementNamed(context, MyTestPage.route);
+            Navigator.pushReplacementNamed(context, TopoMap.route);
           },
         ),
         ListTile(
