@@ -9,47 +9,15 @@ import 'dart:developer';
 class MapMarkers {
   List<Marker> markers = new List();
 
-  MapMarkers(Map<String, dynamic> rockDetails, context,
-      Map<String, bool> filtersState, Map<String, dynamic> filtersContent) {
+  MapMarkers(Set<Item> rocksItemsToDisplay ) {
 
-    Map<String,Rock> rocks = rockDetails;
-    log(rocks["246"].title);
-    log(rocks["246"].routesStatsSimplified.toString());
-    List<String> rockIdToDisplay = new List();
-    rockIdToDisplay.addAll(rocks.keys);
-
-    if (filtersState["showOnlyFavorites"] == true) {
-
-      for (var rockId in rocks.keys) {
-        if (filtersContent["favorites"].contains(rockId) != true) {
-          rockIdToDisplay.remove(rockId);
-        }
+    for (var item in rocksItemsToDisplay)
+      {
+        this.markers.add(CreateMarker(item));
       }
-    }
-    List<String> routeFilters = [
-      "includeWithIII",
-      "includeWithIV",
-      "includeWithV",
-      "includeWithVI"
-    ];
-    for (var filter in routeFilters) {
-      if (filtersState[filter] == true) {
-        String currentRouteLevel = filtersContent[filter];
-        for (var rock in rocks.values) {
-          if (rock.routesStatsSimplified[currentRouteLevel] == 0)
-            {
-              rockIdToDisplay.remove(rock.id);
-            }
-        }
-      }
+
     }
 
-    for (var rock in rockDetails.values) {
-      if (rockIdToDisplay.contains(rock.id)) {
-        this.markers.add(CreateMarker(rock));
-      }
-    }
-  }
 
   Marker CreateMarker(Item rockData) {
     return RockMarker(

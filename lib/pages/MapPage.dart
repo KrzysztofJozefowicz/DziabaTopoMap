@@ -61,18 +61,14 @@ class MapPage extends State<MyTestPage> {
               child: FutureBuilder<Map<String, Map<String, Item>>>(
                 future: futureData,
                 builder: (context, snapshot) {
-                  if (snapshot.hasData &&
-                      (snapshot.data["rock"].length != null)) {
+                  if (snapshot.hasData && (snapshot.data["rock"].length != null)) {
                     myState.PopulateRocks(snapshot.data["rock"]);
-                    MapMarkers my_markers = new MapMarkers(
-                        snapshot.data["rock"],
-                        context,
-                        myState.FilterState,
-                        myState.FilterContent,
-                        );
+                    myState.RocksIdToDisplay = ApplyFilters(myState.rocks, myState.FilterState, myState.FilterContent);
+                    MapMarkers my_markers = new MapMarkers(myState.GetRocksItemsToDisplay());
+                    //mapController = fitMarkersToView(myState.GetRocksItemsToDisplay(), mapController);
                     List<Marker> markers = my_markers.markers;
-                    return Consumer<appState>(
-                        builder: (context, _filterState, _) {
+
+                    return Consumer<appState>(builder: (context, _filterState, _) {
                       return (FlutterMap(
                         mapController: mapController,
                         options: MapOptions(
@@ -89,8 +85,7 @@ class MapPage extends State<MyTestPage> {
                         ),
                         layers: [
                           TileLayerOptions(
-                              urlTemplate:
-                                  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                              urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                               subdomains: ['a', 'b', 'c'],
                               tileProvider: CachedNetworkTileProvider()),
                           MarkerLayerOptions(markers: markers),
@@ -99,19 +94,13 @@ class MapPage extends State<MyTestPage> {
                             popupController: _popupLayerController,
                             popupBuilder: (_, Marker marker) {
                               if (marker is RockMarker) {
-                                return markerPopup(marker,mapController);
+                                return markerPopup(marker, mapController);
                               }
-                              return Card(
-                                  child: const Text(
-                                      'NotImplemented: Not a RockMarker'));
+                              return Card(child: const Text('NotImplemented: Not a RockMarker'));
                             },
                           ),
                           ZoomButtonsPluginOption(
-                              minZoom: 1,
-                              maxZoom: 19,
-                              mini: true,
-                              padding: 10,
-                              alignment: Alignment.bottomRight)
+                              minZoom: 1, maxZoom: 19, mini: true, padding: 10, alignment: Alignment.bottomRight)
                         ],
                       ));
                     });
@@ -128,5 +117,29 @@ class MapPage extends State<MyTestPage> {
         ),
       ),
     );
+  }
+
+  MapController fitMarkersToView(Iterable ItemsToDisplay, MapController mapController) {
+    if (mapController != null) {
+      log("fitMarkersToView" + ItemsToDisplay.length.toString());
+      var fitOptions = new FitBoundsOptions(padding: EdgeInsets.all(75.0));
+      var mapBounds = SetMapBounds(ItemsToDisplay);
+      log("mapBounds: "+mapBounds.length.toString());
+
+      mapController.fitBounds(LatLngBounds.fromPoints(mapBounds), options: fitOptions);
+      return mapController;
+    }
+  }
+
+  List<LatLng> SetMapBounds(Iterable ListOfItems) {
+    List<LatLng> mapBounds = new List();
+    for (var element in ListOfItems) {
+      Rock rock = element;
+      mapBounds.add(
+        LatLng(double.parse(rock.lat), double.parse(rock.lng)),
+      );
+    }
+    log("SetMapBounds: "+mapBounds.length.toString());
+    return mapBounds;
   }
 }

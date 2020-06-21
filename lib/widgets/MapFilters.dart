@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
+import 'package:topo_map/main.dart';
 import '../states/appState.dart';
 import 'package:provider/provider.dart';
 import '../dataProvider/portalGorskiApi.dart';
@@ -87,19 +88,14 @@ class _FavoriteButtonState extends State<FavoriteButton> {
         onTap: () => setState(() {
           bool currentFavoriteState = !myState.FilterState["showOnlyFavorites"];
           myState.SetFilterState("showOnlyFavorites", currentFavoriteState);
-          if (currentFavoriteState == true) {
-            List<LatLng> mapBounds = new List();
-            for (var element in myState.favorites) {
-              Item rock = myState.GetRockById(element);
-              mapBounds.add(
-                LatLng(double.parse(rock.lat), double.parse(rock.lng)),
-              );
-            }
-            var fitOptions =
-                new FitBoundsOptions(padding: EdgeInsets.all(75.0));
-            mapController.fitBounds(LatLngBounds.fromPoints(mapBounds),
-                options: fitOptions);
-          }
+
+//          if (currentFavoriteState == true && myState.favorites.length >0) {
+//            var fitOptions =
+//                new FitBoundsOptions(padding: EdgeInsets.all(75.0));
+//            var mapBounds = SetMapBouds(myState.GetRocksItemsFromIds(myState.favorites));
+//            mapController.fitBounds(LatLngBounds.fromPoints(mapBounds),
+//                options: fitOptions);
+//          }
 
         }),
       );
@@ -161,3 +157,40 @@ class _ShowRocksWithRouteLevelState extends State<ShowRocksWithRouteLevel> {
     ;
   }
 }
+
+Set<String> ApplyFilters(Map<String,Item> itemsToFilter,Map<String,bool> filtersState, Map<String,dynamic> filtersContent)
+{
+  Set<String> filteredItems = new Set();
+
+  Map<String,Rock> rocks = itemsToFilter;
+
+  filteredItems.addAll(rocks.keys);
+
+  if (filtersState["showOnlyFavorites"] == true) {
+
+    for (var rockId in rocks.keys) {
+      if (filtersContent["favorites"].contains(rockId) != true) {
+        filteredItems.remove(rockId);
+      }
+    }
+  }
+  List<String> routeFilters = [
+    "includeWithIII",
+    "includeWithIV",
+    "includeWithV",
+    "includeWithVI"
+  ];
+  for (var filter in routeFilters) {
+    if (filtersState[filter] == true) {
+      String currentRouteLevel = filtersContent[filter];
+      for (var rock in rocks.values) {
+        if (rock.routesStatsSimplified[currentRouteLevel] == 0)
+        {
+          filteredItems.remove(rock.id);
+        }
+      }
+    }
+  }
+  return filteredItems;
+}
+

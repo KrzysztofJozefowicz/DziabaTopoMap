@@ -7,10 +7,44 @@ class  appState extends ChangeNotifier {
   Item  _rockItem;
   Color favColor = Colors.transparent;
   List<String> favorites = new List();
+  Set<String> _rocksIdToDisplay = new Set();
   Map<String,Item> _rocks = new Map();
   Map<String,bool> _filterState = _defaultFilterState();
   Map<String,dynamic> _filterContent = _defaultFilterContent() ;
   Map<String,bool> get FilterState => _filterState;
+
+
+
+  Set<Item> GetRocksItemsFromIds(Iterable ItemsId)
+  {
+    Set<Item> RocksItems= new Set();
+    for (var element in ItemsId)
+      {
+        RocksItems.add(GetRockById(element));
+      }
+    return RocksItems;
+
+  }
+  set RocksIdToDisplay(Iterable elements) {
+    _rocksIdToDisplay = new Set();
+    _rocksIdToDisplay.addAll(elements);
+  }
+
+  Set<String> GetRocksIdToDisplay()
+  {
+
+    return _rocksIdToDisplay;
+  }
+
+  Set<Item> GetRocksItemsToDisplay()
+  {
+    Set<Item> rocksItemsToDisplay = new Set();
+    for (var element in _rocksIdToDisplay)
+      {
+        rocksItemsToDisplay.add(GetRockById(element));
+      }
+    return rocksItemsToDisplay;
+  }
 
   void SetFilterState(String key, bool value)
   {
