@@ -605,7 +605,7 @@
     "867": {
         "id": "867",
         "lat": "50.86922000000",
-        "lng": "0.00000000000",
+        "lng": "15.90682190000",
         "title": "Gubernator",
         "description": "",
         "type": "rock",
@@ -10586,8 +10586,8 @@
     },
     "565": {
         "id": "565",
-        "lat": "0.00000000000",
-        "lng": "0.00000000000",
+        "lat": "50.7379917",
+        "lng": "19.2716683",
         "title": "Mnich",
         "description": "",
         "type": "rock",
@@ -14472,24 +14472,6 @@
         "childSafe": "TAK",
         "hights": "min. 15.00m - max. 20.00m",
         "routesStats": {}
-    },
-    "391": {
-        "id": "391",
-        "lat": "0.00000000000",
-        "lng": "0.00000000000",
-        "title": "Testowa",
-        "description": "",
-        "type": "rock",
-        "url": "/Testowa,Jura-Krakowsko-Cz\u0119stochowska,skala,391",
-        "img": "/topo/default/images/nophoto.jpg",
-        "rockType": "piaskowiec",
-        "childSafe": "TAK",
-        "hights": "min. 100.00m - max. 0.00m",
-        "routesStats": {
-            "III+": "1",
-            "VI+/1": "1",
-            "VI.4/4+": "1"
-        }
     },
     "742": {
         "id": "742",
