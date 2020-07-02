@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../states/appState.dart';
@@ -8,12 +6,15 @@ import '../widgets/MapMarkers.dart';
 import 'package:provider/provider.dart';
 import '../dataProvider/portalGorskiApi.dart';
 import 'package:latlong/latlong.dart';
+import 'package:maps_launcher/maps_launcher.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'dart:developer';
 
 class markerPopup extends StatefulWidget {
   final Marker marker;
   final MapController mapController;
 
-  markerPopup(this.marker,this.mapController, {Key key}) : super(key: key);
+  markerPopup(this.marker, this.mapController, {Key key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => _markerPopupState(this.marker, this.mapController);
@@ -28,125 +29,60 @@ class _markerPopupState extends State<markerPopup> {
   @override
   Widget build(BuildContext context) {
     var myState = Provider.of<appState>(context, listen: true);
-    return Consumer<appState>(builder: (context, favColor, _) {
+    return Consumer<appState>(builder: (context, favorites, _) {
       return Card(
-        color: Colors.grey,
+        color: Colors.greenAccent,
         child: InkWell(
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              _cardDescription(context),
+              Container(
+                constraints: BoxConstraints(minWidth: 50, maxWidth: 200),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      _rockName(myState),
+                      _createBoxes(),
+                      //_createLegends(),
+                      _buildIconBar(_marker.rock.RockData, _mapController)
+                    ]),
+              ),
+              //_cardDescription(context),
             ],
           ),
-          onTap: () => setState(() {
-            LatLng latlng = LatLng(double.parse(_marker.rock.RockData.lat),double.parse(_marker.rock.RockData.lng));
-            double zoom = 10.0; //the zoom you want
-            _mapController.move(latlng,zoom);
-            myState.rockItem = _marker.rock.RockData;
-          }),
+
         ),
       );
     });
-
-
   }
 
-  Widget _cardDescription(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: Container(
-        constraints: BoxConstraints(minWidth: 50, maxWidth: 200),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: routesColorBar(context),
-        ),
-      ),
+  Widget _rockName(appState myState) {
+    return InkWell(
+      child: Text(_marker.rock.RockData.title,
+          overflow: TextOverflow.fade,
+          softWrap: false,
+          style: const TextStyle(
+            fontWeight: FontWeight.w500,
+            fontSize: 14.0,
+          )),
+      onTap: () => setState(() {
+        myState.rockItem = _marker.rock.RockData;
+      }),
     );
   }
 
-  List<Widget> routesColorBar(BuildContext context) {
-    var myState = Provider.of<appState>(context, listen: true);
-    List<Widget> RouteStatsStripe = new List();
-    RouteStatsStripe.add(Text(
-      _marker.rock.RockData.title,
-      overflow: TextOverflow.fade,
-      softWrap: false,
-      style: const TextStyle(
-        fontWeight: FontWeight.w500,
-        fontSize: 14.0,
-      ),
-    ));
-
-    RouteStatsStripe.add(Container(
+  Widget _createBoxes() {
+    return Container(
         color: Colors.transparent,
         child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.end,
-            children: _createColorBoxes(_marker))));
-    RouteStatsStripe.add(Container(
-        color: Colors.transparent,
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: _createBoxLegends(_marker))));
-    RouteStatsStripe.add(_buildFavoriteBar(myState, _marker.rock.RockData.id));
-
-
-    return RouteStatsStripe;
+            children: _createColorBoxes(_marker)));
   }
 
-  Widget _buildFavoriteBar(appState myState, String id) {
-        return InkWell(
-          child: Container(
-            color: myState.favColor,
-            child:  _isInFavorite(myState, id),
-          ),
-          onTap: () => setState(() {
-            if (myState.IsInFavorites(id)) {
-              myState.RemoveFromFavorites(id);
-              myState.favColor = Colors.grey;
-              myState.FilterContent["favorites"]=myState.favorites;
-
-            } else {
-              myState.AddToFavorites(id);
-              myState.favColor = Colors.amber;
-              myState.FilterContent["favorites"]=myState.favorites;
-
-            }
-          }),
-        );
-  }
-
-  Widget _isInFavorite(appState myState, String id) {
-    if (myState.IsInFavorites(id)) {
-      return Text("Tap to remove from favorites",
-          textAlign: TextAlign.center);
-    } else {
-      return Text("Add to favorites",
-          textAlign: TextAlign.center
-      );
-    }
-  }
-
-  _createBoxLegends(RockMarker rockData) {
-    List<Widget> routesLegendsStripe = new List();
-    Rock rock = rockData.rock.RockData;
-    Map<String, int> routesCount = rock.routesStatsSimplified;
-
-    for (var route in routesCount.keys) {
-      routesLegendsStripe.add(SizedBox(
-        width: 42.0,
-        height: 42.0,
-        child: Text(route + ":" + rock.routesStatsSimplified[route].toString()),
-      ));
-    }
-
-    return routesLegendsStripe;
-  }
-
-  _createColorBoxes(RockMarker rockData) {
+  List<Widget> _createColorBoxes(RockMarker rockData) {
     List<Widget> routesBoxesStripe = new List();
     Rock rock = rockData.rock.RockData;
     Map<String, Color> routeToColorMappings = {
@@ -157,29 +93,121 @@ class _markerPopupState extends State<markerPopup> {
     };
 
     for (var route in rock.routesStatsSimplified.keys) {
-      double height = 1.0;
-      Color color = routeToColorMappings[route];
+      double boxHeight = 1.0;
+      Color boxColor = routeToColorMappings[route];
       if (rock.routesStatsSimplified[route] > 0 && rock.routesStatsSimplified[route] < 3) {
-        height = 10.0;
+        boxHeight = 10.0;
       }
       if (rock.routesStatsSimplified[route] >= 3 && rock.routesStatsSimplified[route] < 6) {
-        height = 20.0;
+        boxHeight = 20.0;
       }
       if (rock.routesStatsSimplified[route] >= 6 && rock.routesStatsSimplified[route] < 10) {
-        height = 30.0;
+        boxHeight = 30.0;
       }
       if (rock.routesStatsSimplified[route] >= 10) {
-        height = 42.0;
+        boxHeight = 42.0;
       }
-
-      routesBoxesStripe.add(SizedBox(
-          width: 42.0,
-          height: height,
-          child: DecoratedBox(decoration: BoxDecoration(color: color))
-          ));
+      routesBoxesStripe.add(Stack(
+        alignment: Alignment.bottomCenter,
+        children: <Widget>[
+          SizedBox(width: 42.0, height: boxHeight, child: DecoratedBox(decoration: BoxDecoration(color: boxColor))),
+          SizedBox(
+              width: 42.0,
+              height: 42.0,
+              child: Center(child: Text(route + ":" + rock.routesStatsSimplified[route].toString()))),
+        ],
+      ));
     }
     return routesBoxesStripe;
   }
+}
+
+class _buildIconBar extends StatefulWidget {
+  final Rock _rockItem;
+  final MapController _mapController;
+
+  _buildIconBar(this._rockItem, this._mapController, {Key key}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() =>
+      //_FavoriteButtonState();
+      _buildIconBarState(this._rockItem, this._mapController);
+}
+
+class _buildIconBarState extends State<_buildIconBar> {
+  final Rock _rockItem;
+  final MapController _mapController;
+  final double iconSize=30.0;
 
 
+  @override
+  Widget build(BuildContext context) {
+    var myState = Provider.of<appState>(context, listen: true);
+    return Row(
+
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+      InkWell(
+          child: Container(
+            child: _favoriteIcons[myState.IsInFavorites(_rockItem.id)],
+          ),
+          onTap: () => setState(() {
+                if (myState.IsInFavorites(_rockItem.id)) {
+                  myState.RemoveFromFavorites(_rockItem.id);
+                } else {
+                  myState.AddToFavorites(_rockItem.id);
+                }
+                myState.FilterContent["favorites"] = myState.favorites;
+              })),
+      InkWell(
+          child: Container(
+              child: Icon(Icons.navigation, color: Colors.blue, size: iconSize,)),
+          onTap: () => setState(() {
+                MapsLauncher.launchCoordinates(
+                double.parse(_rockItem.lat), double.parse(_rockItem.lng ));
+              })),
+      InkWell(
+          child: Container(
+              child: Icon(Icons.open_in_new, color: Colors.blue, size: iconSize)),
+          onTap: () => setState(() {
+            _launchURL(context, _rockItem.url);
+          })),
+
+      InkWell(
+          child: Container(
+            child: Icon(Icons.zoom_out_map, color: Colors.red, size: iconSize),
+          ),
+          onTap: () => setState(() {
+                // TODO: move previous map possition and zoom to state
+                LatLng latlng = LatLng(double.parse(_rockItem.lat), double.parse(_rockItem.lng));
+                double zoom = 15.0; //the zoom you want
+                _mapController.move(latlng, zoom);
+              }))
+    ]);
+  }
+
+  _buildIconBarState(this._rockItem, this._mapController);
+
+  final Map<bool, Widget> _favoriteIcons = {
+    false: Icon(
+      Icons.favorite,
+      color: Colors.grey,
+      size: 30.0,
+    ),
+    true: Icon(
+      Icons.favorite,
+      color: Colors.orange,
+      size: 30.0,
+    )
+  };
+}
+_launchURL(BuildContext context,String url) async {
+  const baseUrl = "http://topo.portalgorski.pl/";
+  String urlToLoad = baseUrl+url;
+
+  if (await canLaunch(urlToLoad)) {
+    await launch(urlToLoad);
+  } else {
+    throw 'Could not launch $urlToLoad';
+  }
 }

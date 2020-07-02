@@ -10,7 +10,7 @@ import '../dataProvider/portalGorskiApi.dart';
 import '../widgets/MapMarkers.dart';
 import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
 import 'dart:async';
-import 'dart:developer';
+
 import '../widgets/markerPopup.dart';
 import '../widgets/MapFilters.dart';
 import 'package:global_configuration/global_configuration.dart';
@@ -39,6 +39,7 @@ class TopoMapPage extends State<TopoMap> {
   @override
   Widget build(BuildContext context) {
     var myState = Provider.of<appState>(context, listen: true);
+
     MapController mapController = new MapController();
 
     return Scaffold(
@@ -57,63 +58,83 @@ class TopoMapPage extends State<TopoMap> {
       drawer: buildDrawer(context, TopoMap.route),
       body: Padding(
         padding: EdgeInsets.all(8.0),
-        child: Column(
+        child: Stack(
           children: [
-            MapFilters(mapController),
-            //MapFilters(),
+            Column(
+              //mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Flexible(child: Consumer<appState>(builder: (context, _filterState, _) {
+                  return FutureBuilder<Map<String, Map<String, Item>>>(
+                    future: futureData,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData && (snapshot.data["rock"].length != null)) {
+                        myState.PopulateRocks(snapshot.data["rock"]);
+                        myState.RocksIdToDisplay = ApplyFilters(myState.rocks, myState.FilterState, myState.FilterContent);
+                        MapMarkers my_markers = new MapMarkers(myState.GetRocksItemsToDisplay());
+                        List<Marker> markers = my_markers.markers;
 
-            Flexible(child: Consumer<appState>(builder: (context, _filterState, _) {
-              return FutureBuilder<Map<String, Map<String, Item>>>(
-                future: futureData,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData && (snapshot.data["rock"].length != null)) {
-                    myState.PopulateRocks(snapshot.data["rock"]);
-                    myState.RocksIdToDisplay = ApplyFilters(myState.rocks, myState.FilterState, myState.FilterContent);
-                    MapMarkers my_markers = new MapMarkers(myState.GetRocksItemsToDisplay());
-                    List<Marker> markers = my_markers.markers;
-                    return (FlutterMap(
-                      mapController: mapController,
-                      options: MapOptions(
-                        plugins: [ZoomButtonsPlugin(), PopupMarkerPlugin()],
-                        interactive: true,
-                        onTap: (_) => setState(() {
-                          _popupLayerController.hidePopup();
-                          myState.ClearRockItem();
-                        }),
-                        center: LatLng(53.5, 19.09),
-                        zoom: 5.0,
-                        //                  maxZoom: 5.0,
-                        //                    minZoom: 1.0,
-                      ),
-                      layers: [
-                        TileLayerOptions(
-                            urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                            subdomains: ['a', 'b', 'c'],
-                            tileProvider: CachedNetworkTileProvider()),
-                        MarkerLayerOptions(markers: markers),
-                        PopupMarkerLayerOptions(
-                          markers: markers,
-                          popupController: _popupLayerController,
-                          popupBuilder: (_, Marker marker) {
-                            if (marker is RockMarker) {
-                              return markerPopup(marker, mapController);
-                            }
-                            return Card(child: const Text('NotImplemented: Not a RockMarker'));
-                          },
-                        ),
-                        ZoomButtonsPluginOption(
-                            minZoom: 1, maxZoom: 19, mini: true, padding: 10, alignment: Alignment.bottomRight)
-                      ],
-                    ));
-                  } else if (snapshot.hasError) {
-                    return Text("${snapshot.error}");
-                  }
-                  // By default, show a loading spinner.
-                  return CircularProgressIndicator();
-                },
-              );
-            })),
-            RockWidget()
+                        return (FlutterMap(
+                          mapController: mapController,
+                          options: MapOptions(
+                            plugins: [ZoomButtonsPlugin(), PopupMarkerPlugin()],
+                            interactive: true,
+                            onTap: (_) => setState(() {
+                              _popupLayerController.hidePopup();
+                              myState.ClearRockItem();
+                            }),
+                            center: LatLng(53.5, 19.09),
+                            zoom: 5.0,
+                            //                  maxZoom: 5.0,
+                            //                    minZoom: 1.0,
+                          ),
+                          layers: [
+                            TileLayerOptions(
+                                urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                                subdomains: ['a', 'b', 'c'],
+                                tileProvider: CachedNetworkTileProvider()),
+                            MarkerLayerOptions(markers: markers),
+
+                            PopupMarkerLayerOptions(
+                              markers: markers,
+                              popupController: _popupLayerController,
+                              popupBuilder: (_, Marker marker) {
+
+                                if (marker is RockMarker) {
+                                  return markerPopup(marker, mapController);
+                                }
+                                return Card(child: const Text('NotImplemented: Not a RockMarker'));
+                              },
+                            ),
+                            ZoomButtonsPluginOption(
+                                minZoom: 1, maxZoom: 19, mini: true, padding: 10, alignment: Alignment.bottomRight)
+                          ],
+                        ));
+                      } else if (snapshot.hasError) {
+                        return Text("${snapshot.error}");
+                      }
+                      // By default, show a loading spinner.
+                      return CircularProgressIndicator();
+                    },
+                  );
+                })),
+                //RockWidget()
+              ],
+            ),
+            Positioned(
+              right: 10,
+              top: 10,
+              //child:MapFilters(mapController),
+              child:  PopupMenuButton<int>(
+                icon: Icon(Icons.filter_list),
+                itemBuilder: (context) => [
+                  PopupMenuItem(
+                    value: 1,
+                    child: MapFilters(mapController),
+                  ),
+                ],
+              )
+            ),
+
           ],
         ),
       ),

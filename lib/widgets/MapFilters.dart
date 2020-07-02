@@ -22,11 +22,10 @@ class MapFilters extends StatefulWidget {
   }
 }
 
-class MapFiltersWidget extends State<MapFilters> {
+class MapFiltersWidget extends State<MapFilters> with SingleTickerProviderStateMixin {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final MapController mapController;
 
-  //MapFiltersWidget();
   MapFiltersWidget(this.mapController);
 
   @override
@@ -34,48 +33,40 @@ class MapFiltersWidget extends State<MapFilters> {
     super.initState();
   }
 
+  Widget ButtonsTogether() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: <Widget>[
+        ShowFavorites(),
+        ShowRocksWithRouteLevel('III', "includeWithIII"),
+        ShowRocksWithRouteLevel('IV', "includeWithIV"),
+        ShowRocksWithRouteLevel('V', "includeWithV"),
+        ShowRocksWithRouteLevel('VI', "includeWithVI"),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    var myState = Provider.of<appState>(context, listen: true);
     return Container(
-        color: Colors.transparent,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            //FavoriteButton(mapController),
-            FavoriteButton(mapController),
-            ShowRocksWithRouteLevel('III', "includeWithIII",mapController),
-            ShowRocksWithRouteLevel('IV', "includeWithIV",mapController),
-            ShowRocksWithRouteLevel('V', "includeWithV",mapController),
-            ShowRocksWithRouteLevel('VI', "includeWithVI",mapController),
-            //Text("Trad_only"),
-            // Text("Sport_only")
-          ],
-        ));
+      child: ButtonsTogether(),
+    );
   }
 }
 
-class FavoriteButton extends StatefulWidget {
-  final MapController mapController;
-
-  FavoriteButton(this.mapController, {Key key}) : super(key: key);
-
+class ShowFavorites extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() =>
-      //_FavoriteButtonState();
-      _FavoriteButtonState(this.mapController);
+  State<StatefulWidget> createState() => _ShowFavoritesState();
 }
 
-class _FavoriteButtonState extends State<FavoriteButton> {
-  final MapController mapController;
-
-  //_FavoriteButtonState();
-  _FavoriteButtonState(this.mapController);
+class _ShowFavoritesState extends State<ShowFavorites> {
+  _ShowFavoritesState();
 
   @override
   Widget build(BuildContext context) {
     var myState = Provider.of<appState>(context, listen: true);
-    final Map<bool, Widget> _icons = {
+
+    Map<bool, Widget> _icons = {
       false: Icon(
         Icons.favorite,
         color: Colors.grey,
@@ -89,36 +80,41 @@ class _FavoriteButtonState extends State<FavoriteButton> {
     };
     return Consumer<appState>(builder: (context, _filterState, _) {
       return InkWell(
-        child: _icons[myState.FilterState["showOnlyFavorites"]],
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [Text("Favorites only"), _icons[myState.FilterState["showOnlyFavorites"]]],
+        ),
         onTap: () => setState(() {
           bool currentFavoriteState = !myState.FilterState["showOnlyFavorites"];
           myState.SetFilterState("showOnlyFavorites", currentFavoriteState);
-          moveMApToFitFilteredMarkers(myState,mapController);
-
         }),
       );
     });
+    //  children:
   }
 }
 
 class ShowRocksWithRouteLevel extends StatefulWidget {
   final String fieldName;
   final String filterName;
-  final MapController mapController;
 
-  //ShowRocksWithRouteLevel(this.mapController, {Key key}) : super(key: key);
-
-  const ShowRocksWithRouteLevel(this.fieldName, this.filterName, this.mapController);
+  const ShowRocksWithRouteLevel(this.fieldName, this.filterName);
 
   @override
-  State<StatefulWidget> createState() => _ShowRocksWithRouteLevelState(mapController);
+  State<StatefulWidget> createState() => _ShowRocksWithRouteLevelState();
 }
 
 class _ShowRocksWithRouteLevelState extends State<ShowRocksWithRouteLevel> {
-  final MapController mapController;
-  _ShowRocksWithRouteLevelState(this.mapController);
+  _ShowRocksWithRouteLevelState();
 
-  Map<String, Color> routeToColorMappings = {
+  Map<String, IconData> _routeIcons = {
+    "III": Icons.filter_3,
+    "IV": Icons.filter_4,
+    "V": Icons.filter_5,
+    "VI": Icons.filter_6,
+  };
+
+  Map<String, Color> _routeToColorMappings = {
     "III": Colors.lightGreen,
     "IV": Colors.cyan,
     "V": Colors.orange,
@@ -130,26 +126,24 @@ class _ShowRocksWithRouteLevelState extends State<ShowRocksWithRouteLevel> {
     var myState = Provider.of<appState>(context, listen: true);
     Color boxColor = Colors.grey;
     if (myState.FilterState[widget.filterName] == true) {
-      boxColor = routeToColorMappings[myState.FilterContent[widget.filterName]];
+      boxColor = _routeToColorMappings[myState.FilterContent[widget.filterName]];
     }
-
+//_routeIcons[myState.FilterContent[widget.filterName]]
     return Consumer<appState>(builder: (context, _filterState, _) {
       return InkWell(
-          child: Stack(
-            children: <Widget>[
-              SizedBox(width: 42.0, height: 42.0, child: DecoratedBox(decoration: BoxDecoration(color: boxColor))
-                  //child: Text(route+":"+routesCount[route].toString()),
-                  ),
-              SizedBox(width: 42.0, height: 42.0, child: Center(child: Text(widget.fieldName))),
-            ],
-          ),
-          onTap: () => setState(() {
-                bool currentFilterRouteState = !myState.FilterState[widget.filterName];
-                myState.SetFilterState(widget.filterName, currentFilterRouteState);
-                moveMApToFitFilteredMarkers(myState,mapController);
-              }));
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text("Rocks with " + myState.FilterContent[widget.filterName]),
+            Icon(_routeIcons[myState.FilterContent[widget.filterName]], color: boxColor, size: 24.0)
+          ],
+        ),
+        onTap: () => setState(() {
+          bool currentFilterRouteState = !myState.FilterState[widget.filterName];
+          myState.SetFilterState(widget.filterName, currentFilterRouteState);
+        }),
+      );
     });
-    ;
   }
 }
 
@@ -162,6 +156,8 @@ Set<String> ApplyFilters(
   filteredItems.addAll(rocks.keys);
 
   if (filtersState["showOnlyFavorites"] == true) {
+    log("favorites ids");
+    log(filtersContent["favorites"].toString());
     for (var rockId in rocks.keys) {
       if (filtersContent["favorites"].contains(rockId) != true) {
         filteredItems.remove(rockId);
@@ -182,31 +178,4 @@ Set<String> ApplyFilters(
   return filteredItems;
 }
 
-MapController fitMarkersToView(Iterable ItemsToDisplay, MapController mapController) {
-  if (mapController != null) {
-    var fitOptions = new FitBoundsOptions(padding: EdgeInsets.all(75.0));
-    var mapBounds = SetMapBounds(ItemsToDisplay);
-    mapController.fitBounds(LatLngBounds.fromPoints(mapBounds), options: fitOptions);
-    return mapController;
-  }
-}
 
-List<LatLng> SetMapBounds(Iterable ListOfItems) {
-  List<LatLng> mapBounds = new List();
-  for (var element in ListOfItems) {
-    Rock rock = element;
-    mapBounds.add(
-      LatLng(double.parse(rock.lat), double.parse(rock.lng)),
-    );
-  }
-  return mapBounds;
-}
-
-moveMApToFitFilteredMarkers(appState myState, MapController mapController)
-{
-  myState.RocksIdToDisplay = ApplyFilters(myState.rocks, myState.FilterState, myState.FilterContent);
-  var fitOptions = new FitBoundsOptions(padding: EdgeInsets.all(75.0));
-  var mapBounds = SetMapBounds(myState.GetRocksItemsToDisplay());
-  mapController.fitBounds(LatLngBounds.fromPoints(mapBounds), options: fitOptions);
-
-}

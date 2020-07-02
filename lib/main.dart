@@ -4,17 +4,22 @@ import 'package:topo_map/pages/FavoritesPage.dart';
 
 import './pages/MapPage.dart';
 import './states/appState.dart';
-import 'package:global_configuration/global_configuration.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await GlobalConfiguration().loadFromPath("assets/rockApiData.json");
+
+void main() {
   runApp(
-    MultiProvider(
-      providers: [ChangeNotifierProvider(builder: (context) => appState())],
+    ChangeNotifierProvider(
+      create: (context) => appState(),
       child: MyApp(),
     ),
   );
+
+//  runApp(
+//    MultiProvider(
+//      providers: [ChangeNotifierProvider(builder: (context) => appState())],
+//      child: MyApp(),
+//    ),
+//  );
 }
 
 class MyApp extends StatelessWidget {

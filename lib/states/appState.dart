@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../dataProvider/portalGorskiApi.dart';
+import 'package:latlong/latlong.dart';
 import 'dart:developer';
 
 class  appState extends ChangeNotifier {
@@ -12,6 +13,7 @@ class  appState extends ChangeNotifier {
   Map<String,bool> _filterState = _defaultFilterState();
   Map<String,dynamic> _filterContent = _defaultFilterContent() ;
   Map<String,bool> get FilterState => _filterState;
+
 
 
 

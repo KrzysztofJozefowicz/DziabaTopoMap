@@ -38,7 +38,7 @@ class FavoritesPage extends State<Favorites> {
             child: Column(
                 children: [
                     Flexible(child: ListView(children: _listFavorites(context,myState))),
-                    RockWidget()
+                    //RockWidget()
             ])));
   }
 
