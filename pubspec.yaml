@@ -33,6 +33,7 @@ dependencies:
   url_launcher: any
   maps_launcher:  any
   flutter_map_marker_popup: any
+  flutter_map_marker_cluster: any
   global_configuration: any
 
 

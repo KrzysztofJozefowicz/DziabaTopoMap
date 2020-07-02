@@ -4,12 +4,13 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 import 'zoombuttons_plugin_option.dart';
 import '../widgets/drawer.dart';
-import '../widgets/RockWidget.dart';
+
 import 'package:provider/provider.dart';
 import '../dataProvider/portalGorskiApi.dart';
 import '../widgets/MapMarkers.dart';
 import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
 import 'dart:async';
+import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 
 import '../widgets/markerPopup.dart';
 import '../widgets/MapFilters.dart';
@@ -76,7 +77,8 @@ class TopoMapPage extends State<TopoMap> {
                         return (FlutterMap(
                           mapController: mapController,
                           options: MapOptions(
-                            plugins: [ZoomButtonsPlugin(), PopupMarkerPlugin()],
+                            //plugins: [ZoomButtonsPlugin(), PopupMarkerPlugin()],
+                            plugins: [ZoomButtonsPlugin(), MarkerClusterPlugin()],
                             interactive: true,
                             onTap: (_) => setState(() {
                               _popupLayerController.hidePopup();
@@ -92,21 +94,41 @@ class TopoMapPage extends State<TopoMap> {
                                 urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                                 subdomains: ['a', 'b', 'c'],
                                 tileProvider: CachedNetworkTileProvider()),
-                            MarkerLayerOptions(markers: markers),
-
-                            PopupMarkerLayerOptions(
+                            ZoomButtonsPluginOption(
+                                minZoom: 1, maxZoom: 19, mini: true, padding: 10, alignment: Alignment.bottomRight),
+                            MarkerClusterLayerOptions(
+                              maxClusterRadius: 120,
+                              size: Size(40, 40),
+                              anchor: AnchorPos.align(AnchorAlign.center),
+                              fitBoundsOptions: FitBoundsOptions(
+                                padding: EdgeInsets.all(50),
+                              ),
                               markers: markers,
-                              popupController: _popupLayerController,
-                              popupBuilder: (_, Marker marker) {
-
-                                if (marker is RockMarker) {
-                                  return markerPopup(marker, mapController);
-                                }
-                                return Card(child: const Text('NotImplemented: Not a RockMarker'));
+                              polygonOptions: PolygonOptions(
+                                  borderColor: Colors.blueAccent,
+                                  color: Colors.black12,
+                                  borderStrokeWidth: 3),
+                              popupOptions: PopupOptions(
+                                  popupSnap: PopupSnap.top,
+                                  popupController: _popupLayerController,
+                                  popupBuilder: (_, marker) => Card(
+                                    color: Colors.transparent,
+                                    child: GestureDetector(
+                                      onTap: () => debugPrint("Popup tap!"),
+                                      child:
+                                          markerPopup(marker,mapController)
+                                      //Text(
+                                       // "Container popup for marker at ${marker.point}",
+                                      //),
+                                    ),
+                                  )),
+                              builder: (context, markers) {
+                                return FloatingActionButton(
+                                  child: Text(markers.length.toString()),
+                                  onPressed: null,
+                                );
                               },
                             ),
-                            ZoomButtonsPluginOption(
-                                minZoom: 1, maxZoom: 19, mini: true, padding: 10, alignment: Alignment.bottomRight)
                           ],
                         ));
                       } else if (snapshot.hasError) {

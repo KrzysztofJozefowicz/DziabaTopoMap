@@ -28,7 +28,7 @@ class MapMarkers {
 }
 
 class RockContainer {
-  static const double size = 25;
+  static const double size = 100;
 
   RockContainer({this.RockData});
 
@@ -44,12 +44,19 @@ class RockMarker extends Marker {
       point: new LatLng(double.parse(rock.RockData.lat),
           double.parse(rock.RockData.lng)),
       builder: (BuildContext ctx) =>
-          Icon(
-            Icons.crop_free,
-            color: Colors.pink,
-            size: 30.0,
-            semanticLabel: 'Rock pointer',
-          ));
+          Column(
+            children: [
+              Icon(
+                Icons.crop_free,
+                color: Colors.pink,
+                size: 30.0,
+                semanticLabel: 'Rock pointer',
+              ),
+              Text(rock.RockData.title , textAlign: TextAlign.center,)
+
+            ]
+          )
+          );
 
   final RockContainer rock;
 }
