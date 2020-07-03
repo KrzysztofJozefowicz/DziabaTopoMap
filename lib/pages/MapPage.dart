@@ -45,17 +45,20 @@ class TopoMapPage extends State<TopoMap> {
 
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(actions: <Widget>[
-        // action button
-        IconButton(
-          icon: Icon(Icons.refresh),
-          onPressed: () {
-            setState(() {
-              futureData = fetchData();
-            });
-          },
-        ),
-      ], title: Text('Topo Map')),
+      appBar: AppBar(
+
+          //actions: <Widget>[
+//        // action button
+//        IconButton(
+//          icon: Icon(Icons.refresh),
+//          onPressed: () {
+//            setState(() {
+//              futureData = fetchData();
+//            });
+//          },
+//        ),
+//      ],
+         title: Text('Topo Map')),
       drawer: buildDrawer(context, TopoMap.route),
       body: Padding(
         padding: EdgeInsets.all(8.0),
@@ -97,6 +100,7 @@ class TopoMapPage extends State<TopoMap> {
                             ZoomButtonsPluginOption(
                                 minZoom: 1, maxZoom: 19, mini: true, padding: 10, alignment: Alignment.bottomRight),
                             MarkerClusterLayerOptions(
+
                               maxClusterRadius: 120,
                               size: Size(40, 40),
                               anchor: AnchorPos.align(AnchorAlign.center),
@@ -117,9 +121,7 @@ class TopoMapPage extends State<TopoMap> {
                                       onTap: () => debugPrint("Popup tap!"),
                                       child:
                                           markerPopup(marker,mapController)
-                                      //Text(
-                                       // "Container popup for marker at ${marker.point}",
-                                      //),
+
                                     ),
                                   )),
                               builder: (context, markers) {
@@ -147,7 +149,12 @@ class TopoMapPage extends State<TopoMap> {
               top: 10,
               //child:MapFilters(mapController),
               child:  PopupMenuButton<int>(
-                icon: Icon(Icons.filter_list),
+                color: Theme.of(context).primaryColor,
+                icon: Icon(
+                    Icons.filter_list,
+                  color: Theme.of(context).primaryColor,
+                  size: 40.0,
+                ),
                 itemBuilder: (context) => [
                   PopupMenuItem(
                     value: 1,

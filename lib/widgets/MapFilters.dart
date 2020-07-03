@@ -49,6 +49,7 @@ class MapFiltersWidget extends State<MapFilters> with SingleTickerProviderStateM
   @override
   Widget build(BuildContext context) {
     return Container(
+      color: Theme.of(context).primaryColor,
       child: ButtonsTogether(),
     );
   }
@@ -69,12 +70,12 @@ class _ShowFavoritesState extends State<ShowFavorites> {
     Map<bool, Widget> _icons = {
       false: Icon(
         Icons.favorite,
-        color: Colors.grey,
+        color: Colors.black,
         size: 24.0,
       ),
       true: Icon(
         Icons.favorite,
-        color: Colors.orange,
+        color: Colors.yellow,
         size: 24.0,
       )
     };
@@ -82,7 +83,10 @@ class _ShowFavoritesState extends State<ShowFavorites> {
       return InkWell(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [Text("Favorites only"), _icons[myState.FilterState["showOnlyFavorites"]]],
+          children: [
+              Text("Favorites only",
+                  style: TextStyle( color: Colors.black)),
+              _icons[myState.FilterState["showOnlyFavorites"]]],
         ),
         onTap: () => setState(() {
           bool currentFavoriteState = !myState.FilterState["showOnlyFavorites"];
@@ -117,14 +121,14 @@ class _ShowRocksWithRouteLevelState extends State<ShowRocksWithRouteLevel> {
   Map<String, Color> _routeToColorMappings = {
     "III": Colors.lightGreen,
     "IV": Colors.cyan,
-    "V": Colors.orange,
+    "V": Colors.yellow,
     "VI": Colors.red
   };
 
   @override
   Widget build(BuildContext context) {
     var myState = Provider.of<appState>(context, listen: true);
-    Color boxColor = Colors.grey;
+    Color boxColor = Colors.black;
     if (myState.FilterState[widget.filterName] == true) {
       boxColor = _routeToColorMappings[myState.FilterContent[widget.filterName]];
     }
@@ -134,7 +138,10 @@ class _ShowRocksWithRouteLevelState extends State<ShowRocksWithRouteLevel> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("Rocks with " + myState.FilterContent[widget.filterName]),
+            Text(
+                "Rocks with " + myState.FilterContent[widget.filterName],
+                style: TextStyle(color: Colors.black)
+            ),
             Icon(_routeIcons[myState.FilterContent[widget.filterName]], color: boxColor, size: 24.0)
           ],
         ),

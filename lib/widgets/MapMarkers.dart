@@ -52,7 +52,7 @@ class RockMarker extends Marker {
                 size: 30.0,
                 semanticLabel: 'Rock pointer',
               ),
-              Text(rock.RockData.title , textAlign: TextAlign.center,)
+              Text(rock.RockData.title , textAlign: TextAlign.center, style: TextStyle(color: Colors.black))
 
             ]
           )

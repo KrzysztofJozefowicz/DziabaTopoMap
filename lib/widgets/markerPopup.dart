@@ -31,7 +31,7 @@ class _markerPopupState extends State<markerPopup> {
     var myState = Provider.of<appState>(context, listen: true);
     return Consumer<appState>(builder: (context, favorites, _) {
       return Card(
-        color: Colors.greenAccent,
+        color: Colors.orangeAccent,
         child: InkWell(
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -66,6 +66,7 @@ class _markerPopupState extends State<markerPopup> {
           style: const TextStyle(
             fontWeight: FontWeight.w500,
             fontSize: 14.0,
+            color: Colors.black
           )),
       onTap: () => setState(() {
         myState.rockItem = _marker.rock.RockData;
@@ -88,7 +89,7 @@ class _markerPopupState extends State<markerPopup> {
     Map<String, Color> routeToColorMappings = {
       "III": Colors.lightGreen,
       "IV": Colors.cyan,
-      "V": Colors.orange,
+      "V": Colors.yellow,
       "VI": Colors.red
     };
 
@@ -114,7 +115,16 @@ class _markerPopupState extends State<markerPopup> {
           SizedBox(
               width: 42.0,
               height: 42.0,
-              child: Center(child: Text(route + ":" + rock.routesStatsSimplified[route].toString()))),
+              child: Center(child:
+                Text(
+                    route + ":" + rock.routesStatsSimplified[route].toString(),
+                    style: TextStyle(
+                      color:Colors.black
+                    )
+                )
+
+
+              )),
         ],
       ));
     }
@@ -191,12 +201,12 @@ class _buildIconBarState extends State<_buildIconBar> {
   final Map<bool, Widget> _favoriteIcons = {
     false: Icon(
       Icons.favorite,
-      color: Colors.grey,
+      color: Colors.black,
       size: 30.0,
     ),
     true: Icon(
       Icons.favorite,
-      color: Colors.orange,
+      color: Colors.yellow,
       size: 30.0,
     )
   };
