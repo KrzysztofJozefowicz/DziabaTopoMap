@@ -47,17 +47,6 @@ class TopoMapPage extends State<TopoMap> {
       key: _scaffoldKey,
       appBar: AppBar(
 
-          //actions: <Widget>[
-//        // action button
-//        IconButton(
-//          icon: Icon(Icons.refresh),
-//          onPressed: () {
-//            setState(() {
-//              futureData = fetchData();
-//            });
-//          },
-//        ),
-//      ],
          title: Text('Topo Map')),
       drawer: buildDrawer(context, TopoMap.route),
       body: Padding(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../dataProvider/portalGorskiApi.dart';
 import 'package:latlong/latlong.dart';
 import 'dart:developer';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class  appState extends ChangeNotifier {
   String _url = "";
@@ -13,6 +14,7 @@ class  appState extends ChangeNotifier {
   Map<String,bool> _filterState = _defaultFilterState();
   Map<String,dynamic> _filterContent = _defaultFilterContent() ;
   Map<String,bool> get FilterState => _filterState;
+  bool isLoadedFromSharedPrefs = false;
 
 
 
@@ -101,11 +103,13 @@ class  appState extends ChangeNotifier {
     if (favorites == null)
       {
         favorites.add(id);
+        _saveFavorites(favorites);
         notifyListeners();
       }
     if (!favorites.contains(id))
       {
         favorites.add(id);
+        _saveFavorites(favorites);
         notifyListeners();
       }
   }
@@ -115,6 +119,7 @@ class  appState extends ChangeNotifier {
     if (favorites.contains(id) && favorites != null)
       {
         favorites.remove(id);
+        _saveFavorites(favorites);
         notifyListeners();
       }
   }
@@ -159,5 +164,12 @@ class  appState extends ChangeNotifier {
     return (filterContent);
   }
 }
+_saveFavorites(List<String> FavoritesList) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  log("saving favorites");
+  log(FavoritesList.toString());
+  await prefs.setStringList("Favorites", FavoritesList);
+}
+
 
 

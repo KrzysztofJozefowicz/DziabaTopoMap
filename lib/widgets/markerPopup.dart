@@ -64,13 +64,14 @@ class _markerPopupState extends State<markerPopup> {
           overflow: TextOverflow.fade,
           softWrap: false,
           style: const TextStyle(
-            fontWeight: FontWeight.w500,
-            fontSize: 14.0,
-            color: Colors.black
+              fontWeight: FontWeight.w500,
+              fontSize: 14.0,
+              color: Colors.black
           )),
-      onTap: () => setState(() {
-        myState.rockItem = _marker.rock.RockData;
-      }),
+      onTap: () =>
+          setState(() {
+            myState.rockItem = _marker.rock.RockData;
+          }),
     );
   }
 
@@ -80,12 +81,22 @@ class _markerPopupState extends State<markerPopup> {
         child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.end,
-            children: _createColorBoxes(_marker)));
+            children: createColorBoxes(_marker)));
   }
+}
+List<Widget> createColorBoxes(dynamic rockData) {
+    dynamic rock;
+    if (rockData is RockMarker)
+      {
+        rock = rockData.rock.RockData;
+      }
+    if (rockData is Rock)
+      {
+        rock = rockData;
+      }
 
-  List<Widget> _createColorBoxes(RockMarker rockData) {
     List<Widget> routesBoxesStripe = new List();
-    Rock rock = rockData.rock.RockData;
+
     Map<String, Color> routeToColorMappings = {
       "III": Colors.lightGreen,
       "IV": Colors.cyan,
@@ -130,7 +141,7 @@ class _markerPopupState extends State<markerPopup> {
     }
     return routesBoxesStripe;
   }
-}
+
 
 class _buildIconBar extends StatefulWidget {
   final Rock _rockItem;

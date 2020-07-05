@@ -27,7 +27,22 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    log("in MyApp build");
+    var myState = Provider.of<appState>(context, listen: true);
+    if (myState.isLoadedFromSharedPrefs == false)
+      {
+        log("loading preferences from shared prefs");
+        _loadPreferences(myState);
+        myState.isLoadedFromSharedPrefs = true;
+        log("favorites state");
+        log(myState.favorites.toString());
+      }
+    else
+      {
+        log("preferences already loaded");
+      }
+
+    log("main");
+
     return MaterialApp(
       title: 'Dziabak Map',
         theme: ThemeData(
@@ -46,5 +61,23 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-
+_loadPreferences(appState myState) async{
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  if (prefs.containsKey("Favorites"))
+    {
+      log("loading Favorites from shared prefs");
+      if (prefs.getStringList("Favorites") != null && prefs.getStringList("Favorites").length>0)
+        {
+          List<String> savedFavorites=prefs.getStringList("Favorites");
+          for (var item in savedFavorites)
+            {
+              myState.AddToFavorites(item);
+              myState.FilterContent["favorites"] = myState.favorites;
+            }
+        }
+    }
+  else
+    {
+      log("no Favorites key found in prefs");
+    }
+}
