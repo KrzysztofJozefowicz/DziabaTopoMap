@@ -7,14 +7,14 @@ Drawer buildDrawer(BuildContext context, String currentRoute) {
     child: ListView(
       children: <Widget>[
         ListTile(
-          title: const Text('Map'),
+          title: const Text('Topo'),
           selected: currentRoute == TopoMap.route,
           onTap: () {
             Navigator.pushReplacementNamed(context, TopoMap.route);
           },
         ),
         ListTile(
-          title: const Text('Favorites'),
+          title: const Text('Ulubione'),
           selected: currentRoute == Favorites.route,
           onTap: () {
             Navigator.pushReplacementNamed(context, Favorites.route);

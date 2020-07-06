@@ -47,7 +47,7 @@ class TopoMapPage extends State<TopoMap> {
       key: _scaffoldKey,
       appBar: AppBar(
 
-         title: Text('Topo Map')),
+         title: Text('DziabaTopo')),
       drawer: buildDrawer(context, TopoMap.route),
       body: Padding(
         padding: EdgeInsets.all(8.0),

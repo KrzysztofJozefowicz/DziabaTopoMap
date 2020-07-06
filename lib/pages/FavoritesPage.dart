@@ -7,6 +7,7 @@ import '../widgets/RockWidget.dart';
 import 'dart:async';
 import 'dart:developer';
 import '../widgets/markerPopup.dart';
+import 'package:maps_launcher/maps_launcher.dart';
 
 class Favorites extends StatefulWidget {
   static const String route = 'Favorites';
@@ -49,7 +50,7 @@ class FavoritesPage extends State<Favorites> {
       Item favoriteRock = myState.GetRockById(entry);
       if (favoriteRock != null) {
         favoriteList.add(InkWell(
-            child: _favoriteItem(favoriteRock),
+            child: _favoriteItem(myState, favoriteRock),
             onTap: () => setState(() {
 //                  if (myState.rockItem != favoriteRock){
 //                  myState.rockItem = favoriteRock;}
@@ -61,17 +62,22 @@ class FavoritesPage extends State<Favorites> {
     return favoriteList;
   }
 
-  Widget _favoriteItem(Rock rockItem) {
+  Widget _favoriteItem(appState myState, Rock rockItem) {
     //return(Text(rockItem.title+" "+rockItem.lat+" "+rockItem.lng));
     return (Column(children: [
-      Row(children: <Widget>[
+      Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: <Widget>[
         Text(
           rockItem.title,
           style: TextStyle(color: Colors.black),
         ),
         _routesBox(rockItem)
       ]),
-      Row(children: <Widget>[_actionButtons(rockItem)])
+      actionButtons(myState, rockItem),
+       Divider(color: Colors.black,
+        height: 5,
+        thickness: 1,
+        indent: 0,
+        endIndent: 0,)
     ]));
   }
 
@@ -79,30 +85,44 @@ class FavoritesPage extends State<Favorites> {
     return Row(children: createColorBoxes(rockItem));
   }
 
-  Widget _actionButtons(Rock rockItem) {
-    return (Row(
-      children: [
-        _showOnMap(rockItem),
-        _openInBrowser(rockItem),
-        _navigateToRock(rockItem),
-        _removeFromFavorites(rockItem)
-      ],
-    ));
+  Widget actionButtons(appState myState, Rock rockItem) {
+    final double iconSize = 30.0;
+    return Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+      InkWell(
+          child: Container(
+            child: _favoriteIcons[myState.IsInFavorites(rockItem.id)],
+          ),
+          onTap: () => setState(() {
+                if (myState.IsInFavorites(rockItem.id)) {
+                  myState.RemoveFromFavorites(rockItem.id);
+                } else {
+                  myState.AddToFavorites(rockItem.id);
+                }
+                myState.FilterContent["favorites"] = myState.favorites;
+              })),
+      InkWell(
+          child: Container(
+              child: Icon(
+            Icons.navigation,
+            color: Colors.blue,
+            size: iconSize,
+          )),
+          onTap: () => setState(() {
+                MapsLauncher.launchCoordinates(double.parse(rockItem.lat), double.parse(rockItem.lng));
+              })),
+      InkWell(
+          child: Container(child: Icon(Icons.open_in_new, color: Colors.blue, size: iconSize)),
+          onTap: () => setState(() {
+                launchURL(context, rockItem.url);
+              })),
+    ]);
   }
 
-  Widget _showOnMap(Rock rockItem) {
-    return (Icon(Icons.title));
-  }
-
-  Widget _openInBrowser(Rock rockItem) {
-    return (Icon(Icons.title));
-  }
-
-  Widget _navigateToRock(Rock rockItem) {
-    return (Icon(Icons.title));
-  }
-
-  Widget _removeFromFavorites(Rock rockItem) {
-    return (Icon(Icons.title));
-  }
+  final Map<bool, Widget> _favoriteIcons = {
+    true: Icon(
+      Icons.delete_forever,
+      color: Colors.yellow,
+      size: 30.0,
+    )
+  };
 }

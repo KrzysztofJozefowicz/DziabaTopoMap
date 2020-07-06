@@ -160,6 +160,7 @@ class _buildIconBarState extends State<_buildIconBar> {
   final MapController _mapController;
   final double iconSize=30.0;
 
+  _buildIconBarState(this._rockItem, this._mapController);
 
   @override
   Widget build(BuildContext context) {
@@ -191,7 +192,7 @@ class _buildIconBarState extends State<_buildIconBar> {
           child: Container(
               child: Icon(Icons.open_in_new, color: Colors.blue, size: iconSize)),
           onTap: () => setState(() {
-            _launchURL(context, _rockItem.url);
+            launchURL(context, _rockItem.url);
           })),
 
       InkWell(
@@ -207,7 +208,7 @@ class _buildIconBarState extends State<_buildIconBar> {
     ]);
   }
 
-  _buildIconBarState(this._rockItem, this._mapController);
+
 
   final Map<bool, Widget> _favoriteIcons = {
     false: Icon(
@@ -222,7 +223,7 @@ class _buildIconBarState extends State<_buildIconBar> {
     )
   };
 }
-_launchURL(BuildContext context,String url) async {
+launchURL(BuildContext context,String url) async {
   const baseUrl = "http://topo.portalgorski.pl/";
   String urlToLoad = baseUrl+url;
 
