@@ -15,6 +15,8 @@ class  appState extends ChangeNotifier {
   Map<String,dynamic> _filterContent = _defaultFilterContent() ;
   Map<String,bool> get FilterState => _filterState;
   bool isLoadedFromSharedPrefs = false;
+  LatLng currentUserLocation;
+  LatLng currentMapLocation;
 
 
 

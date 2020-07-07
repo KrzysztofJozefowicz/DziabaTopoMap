@@ -11,11 +11,14 @@ import '../widgets/MapMarkers.dart';
 import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
 import 'dart:async';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
-
+import '../widgets/MapControlButtons.dart';
 import '../widgets/markerPopup.dart';
 import '../widgets/MapFilters.dart';
+import 'package:user_location/user_location.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'dart:convert' show json;
+
+import 'dart:developer';
 
 class TopoMap extends StatefulWidget {
   static const String route = 'TopoMap';
@@ -30,31 +33,31 @@ class TopoMapPage extends State<TopoMap> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final PopupController _popupLayerController = PopupController();
   Future<Map<String, Map<String, Item>>> futureData;
+  StreamController<LatLng> markerlocationStream = StreamController();
+  UserLocationOptions userLocationOptions;
+  MapController mapController = new MapController();
 
   @override
   void initState() {
     super.initState();
     futureData = fetchData();
+    MapController mapController = new MapController();
+
   }
 
   @override
   Widget build(BuildContext context) {
     var myState = Provider.of<appState>(context, listen: true);
 
-    MapController mapController = new MapController();
-
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(
-
-         title: Text('DziabaTopo')),
+      appBar: AppBar(title: Text('DziabaTopo')),
       drawer: buildDrawer(context, TopoMap.route),
       body: Padding(
         padding: EdgeInsets.all(8.0),
         child: Stack(
           children: [
             Column(
-              //mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Flexible(child: Consumer<appState>(builder: (context, _filterState, _) {
                   return FutureBuilder<Map<String, Map<String, Item>>>(
@@ -62,66 +65,73 @@ class TopoMapPage extends State<TopoMap> {
                     builder: (context, snapshot) {
                       if (snapshot.hasData && (snapshot.data["rock"].length != null)) {
                         myState.PopulateRocks(snapshot.data["rock"]);
-                        myState.RocksIdToDisplay = ApplyFilters(myState.rocks, myState.FilterState, myState.FilterContent);
+                        myState.RocksIdToDisplay =
+                            ApplyFilters(myState.rocks, myState.FilterState, myState.FilterContent);
                         MapMarkers my_markers = new MapMarkers(myState.GetRocksItemsToDisplay());
                         List<Marker> markers = my_markers.markers;
-
-                        return (FlutterMap(
+                        List<Marker> markers_empty = new List();
+                        userLocationOptions = UserLocationOptions(
+                          context: context,
                           mapController: mapController,
-                          options: MapOptions(
-                            //plugins: [ZoomButtonsPlugin(), PopupMarkerPlugin()],
-                            plugins: [ZoomButtonsPlugin(), MarkerClusterPlugin()],
-                            interactive: true,
-                            onTap: (_) => setState(() {
-                              _popupLayerController.hidePopup();
-                              myState.ClearRockItem();
-                            }),
-                            center: LatLng(53.5, 19.09),
-                            zoom: 5.0,
-                            //                  maxZoom: 5.0,
-                            //                    minZoom: 1.0,
-                          ),
-                          layers: [
-                            TileLayerOptions(
-                                urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                                subdomains: ['a', 'b', 'c'],
-                                tileProvider: CachedNetworkTileProvider()),
-                            ZoomButtonsPluginOption(
-                                minZoom: 1, maxZoom: 19, mini: true, padding: 10, alignment: Alignment.bottomRight),
-                            MarkerClusterLayerOptions(
+                          markers: markers_empty,
+                          onLocationUpdate: (LatLng pos) => {myState.currentUserLocation = pos},
+                          updateMapLocationOnPositionChange: false,
+                          showMoveToCurrentLocationFloatingActionButton: false,
+                          zoomToCurrentLocationOnLoad: false,
+                        );
 
-                              maxClusterRadius: 120,
-                              size: Size(40, 40),
-                              anchor: AnchorPos.align(AnchorAlign.center),
-                              fitBoundsOptions: FitBoundsOptions(
-                                padding: EdgeInsets.all(50),
-                              ),
-                              markers: markers,
-                              polygonOptions: PolygonOptions(
-                                  borderColor: Colors.blueAccent,
-                                  color: Colors.black12,
-                                  borderStrokeWidth: 3),
-                              popupOptions: PopupOptions(
-                                  popupSnap: PopupSnap.top,
-                                  popupController: _popupLayerController,
-                                  popupBuilder: (_, marker) => Card(
-                                    color: Colors.transparent,
-                                    child: GestureDetector(
-                                      onTap: () => debugPrint("Popup tap!"),
-                                      child:
-                                          markerPopup(marker,mapController)
 
-                                    ),
-                                  )),
-                              builder: (context, markers) {
-                                return FloatingActionButton(
-                                  child: Text(markers.length.toString()),
-                                  onPressed: null,
-                                );
-                              },
+                        return (Stack(children: [
+                          FlutterMap(
+                            mapController: mapController,
+                            options: MapOptions(
+                              plugins: [MarkerClusterPlugin(), UserLocationPlugin()],
+                              interactive: true,
+                              onTap: (_) => setState(() {
+                                _popupLayerController.hidePopup();
+                                myState.ClearRockItem();
+                              }),
+                              center: LatLng(53.5, 19.09),
+                              zoom: 5.0,
                             ),
-                          ],
-                        ));
+                            layers: [
+                              TileLayerOptions(
+                                  urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                                  subdomains: ['a', 'b', 'c'],
+                                  tileProvider: CachedNetworkTileProvider()),
+                              MarkerClusterLayerOptions(
+                                maxClusterRadius: 120,
+                                size: Size(40, 40),
+                                anchor: AnchorPos.align(AnchorAlign.center),
+                                fitBoundsOptions: FitBoundsOptions(
+                                  padding: EdgeInsets.all(50),
+                                ),
+                                markers: markers,
+                                polygonOptions: PolygonOptions(
+                                    borderColor: Colors.blueAccent, color: Colors.black12, borderStrokeWidth: 3),
+                                popupOptions: PopupOptions(
+                                    popupSnap: PopupSnap.top,
+                                    popupController: _popupLayerController,
+                                    popupBuilder: (_, marker) => Card(
+                                          color: Colors.transparent,
+                                          child: GestureDetector(
+                                              onTap: () => debugPrint("Popup tap!"),
+                                              child: markerPopup(marker, mapController)),
+                                        )),
+                                builder: (context, markers) {
+                                  return FloatingActionButton(
+                                    child: Text(markers.length.toString()),
+                                    onPressed: null,
+                                    heroTag: null,
+                                  );
+                                },
+                              ),
+                              MarkerLayerOptions(markers: markers_empty),
+                              userLocationOptions,
+                            ],
+                          ),
+                          MapControlButtons(mapController, userLocationOptions)
+                        ]));
                       } else if (snapshot.hasError) {
                         return Text("${snapshot.error}");
                       }
@@ -134,25 +144,22 @@ class TopoMapPage extends State<TopoMap> {
               ],
             ),
             Positioned(
-              right: 10,
-              top: 10,
-              //child:MapFilters(mapController),
-              child:  PopupMenuButton<int>(
-                color: Theme.of(context).primaryColor,
-                icon: Icon(
-                    Icons.filter_list,
+                right: 10,
+                top: 10,
+                child: PopupMenuButton<int>(
                   color: Theme.of(context).primaryColor,
-                  size: 40.0,
-                ),
-                itemBuilder: (context) => [
-                  PopupMenuItem(
-                    value: 1,
-                    child: MapFilters(mapController),
+                  icon: Icon(
+                    Icons.filter_list,
+                    color: Theme.of(context).primaryColor,
+                    size: 40.0,
                   ),
-                ],
-              )
-            ),
-
+                  itemBuilder: (context) => [
+                    PopupMenuItem(
+                      value: 1,
+                      child: MapFilters(mapController),
+                    ),
+                  ],
+                )),
           ],
         ),
       ),
