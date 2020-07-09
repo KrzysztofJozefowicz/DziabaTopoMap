@@ -10,7 +10,8 @@ Niedługo aplikacja pojawi się w Play Store.
 
 ## Jak to wygląda?
 Wersja na Androida wygląda tak:
-![DziabaTopo na Androidzie](https://github.com/KrzysztofJozefowicz/DziabaTopoMap/blob/master/imgs/DziabaTopoAndroid.jpg "DziabaTopo na Androidzie" | width=100)
+<img src="https://github.com/KrzysztofJozefowicz/DziabaTopoMap/blob/master/imgs/DziabaTopoAndroid.jpg" width="250px">
+
 Wersja webowa dostępna jest [tutaj](https://krzysztofjozefowicz.github.io/DziabaTopoMap/ "tutaj").
 Wsparcie webowe działa o wiele wolniej niż na komórce.
 
