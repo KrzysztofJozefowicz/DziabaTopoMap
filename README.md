@@ -1,6 +1,6 @@
 # DziabaTopo
 ## Co to?
-Apliakacja na Androida oraz iOS pokazująca mapę z listą miejsc do wspinania skałkowego. Każda skała posiada opis, możliwość nawigacji oraz podgląd szczegółów na portalu [topo.portalgorski.pl](http://topo.portalgorski.pl "topo.portalgorski.pl")
+Aplikacja na Androida oraz iOS pokazująca mapę z listą miejsc wspinaczki skałkowej. Każda skała posiada opis, możliwość nawigacji oraz podgląd szczegółów na portalu [topo.portalgorski.pl](http://topo.portalgorski.pl "topo.portalgorski.pl").
 
 ## Dlaczego?
 Korzystanie z [topo.portalgorski.pl](http://topo.portalgorski.pl "topo.portalgorski.pl") na komórce było dla mnie mało wygodne, mapa utraciła swoją funkcjonalność.
