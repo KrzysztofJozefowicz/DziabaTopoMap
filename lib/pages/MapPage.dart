@@ -1,24 +1,20 @@
 import 'package:flutter/material.dart';
-import '../states/appState.dart';
+import '../states/AppState.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
-import 'zoombuttons_plugin_option.dart';
-import '../widgets/drawer.dart';
+import '../widgets/Drawer.dart';
 
 import 'package:provider/provider.dart';
-import '../dataProvider/portalGorskiApi.dart';
+import '../dataProvider/DataLoader.dart';
 import '../widgets/MapMarkers.dart';
 import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
 import 'dart:async';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import '../widgets/MapControlButtons.dart';
-import '../widgets/markerPopup.dart';
+import '../widgets/MarkerPopup.dart';
 import '../widgets/MapFilters.dart';
 import 'package:user_location/user_location.dart';
-import 'package:global_configuration/global_configuration.dart';
-import 'dart:convert' show json;
 
-import 'dart:developer';
 
 class TopoMap extends StatefulWidget {
   static const String route = 'TopoMap';
@@ -67,13 +63,13 @@ class TopoMapPage extends State<TopoMap> {
                         myState.PopulateRocks(snapshot.data["rock"]);
                         myState.RocksIdToDisplay =
                             ApplyFilters(myState.rocks, myState.FilterState, myState.FilterContent);
-                        MapMarkers my_markers = new MapMarkers(myState.GetRocksItemsToDisplay());
-                        List<Marker> markers = my_markers.markers;
-                        List<Marker> markers_empty = new List();
+                        MapMarkers myMarkers = new MapMarkers(myState.GetRocksItemsToDisplay());
+                        List<Marker> markers = myMarkers.markers;
+                        List<Marker> markersEmpty = new List();
                         userLocationOptions = UserLocationOptions(
                           context: context,
                           mapController: mapController,
-                          markers: markers_empty,
+                          markers: markersEmpty,
                           onLocationUpdate: (LatLng pos) => {myState.currentUserLocation = pos},
                           updateMapLocationOnPositionChange: false,
                           showMoveToCurrentLocationFloatingActionButton: false,
@@ -126,7 +122,7 @@ class TopoMapPage extends State<TopoMap> {
                                   );
                                 },
                               ),
-                              MarkerLayerOptions(markers: markers_empty),
+                              MarkerLayerOptions(markers: markersEmpty),
                               userLocationOptions,
                             ],
                           ),

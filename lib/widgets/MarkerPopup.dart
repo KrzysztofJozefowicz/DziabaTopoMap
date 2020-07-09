@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../states/appState.dart';
+import '../states/AppState.dart';
 import 'package:flutter_map/flutter_map.dart';
 import '../widgets/MapMarkers.dart';
 import 'package:provider/provider.dart';
-import '../dataProvider/portalGorskiApi.dart';
+import '../dataProvider/DataLoader.dart';
 import 'package:latlong/latlong.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -225,11 +225,10 @@ class _buildIconBarState extends State<_buildIconBar> {
 }
 launchURL(BuildContext context,String url) async {
   const baseUrl = "http://topo.portalgorski.pl/";
-  String urlToLoad = baseUrl+url;
 
-  if (await canLaunch(urlToLoad)) {
-    await launch(urlToLoad);
+  if (await canLaunch(url)) {
+    await launch(url);
   } else {
-    throw 'Could not launch $urlToLoad';
+    throw 'Could not launch $url';
   }
 }

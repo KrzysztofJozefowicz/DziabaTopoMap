@@ -1,22 +1,11 @@
-import 'package:http/http.dart' as http;
 import 'dart:convert' show json;
-import 'dart:developer';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:flutter/foundation.dart';
+
 
 
 Future<Map<String, Map<String,Item>>> fetchData() async
 {
-  String url_sudety = 'http://topo.portalgorski.pl/topo/json/get/id/634';
-  String url_beskidy = 'http://topo.portalgorski.pl/topo/json/get/id/737';
-  String url_jura = 'http://topo.portalgorski.pl/topo/json/get/id/34';
-  String url_podkarpacie = 'http://topo.portalgorski.pl/topo/json/get/id/131';
-  String url_swietokrzyskie = 'http://topo.portalgorski.pl/topo/json/get/id/540';
-  String url_podhale = 'http://topo.portalgorski.pl/topo/json/get/id/930';
 
-
-
-  //return await callTopoApi(url_sudety);
   return await  loadAsset();
 }
 
@@ -25,20 +14,6 @@ Future<Map<String, Map<String,Item>>> loadAsset() async {
   return groupItemsByType(json.decode(response));
 }
 
-
-
-Future<Map<String, Map<String,Item>>> callTopoApi(String url) async
-{
-  final response =  await http.get(url);
-  if (response.statusCode == 200) {
-    Map<String, Map<String,Item>> out;
-    out=groupItemsByType(json.decode(response.body));
-    return out;}
-  else {
-    throw Exception('Failed to load API from PortalGorski');
-  }
-
-}
 
 Map<String, Map<String,Item>> groupItemsByType(Map<String, dynamic> json) {
   Map<String, Map<String,Item>> sortedItems = {

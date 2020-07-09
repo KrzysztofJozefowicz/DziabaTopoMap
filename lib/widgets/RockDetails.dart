@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 import 'dart:developer';
 import 'package:tuple/tuple.dart';
 import 'package:maps_launcher/maps_launcher.dart';
-import '../dataProvider/portalGorskiApi.dart';
+import '../dataProvider/DataLoader.dart';
 
 //import 'package:user_location/user_location.dart';
 

@@ -1,11 +1,11 @@
 {
-    "name": "topo_map",
-    "short_name": "topo_map",
+    "name": "dziabak_map",
+    "short_name": "dziabak_map",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter application.",
+    "description": "Dziabak Topo Map",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

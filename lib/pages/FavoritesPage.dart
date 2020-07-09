@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import '../states/appState.dart';
-import '../widgets/drawer.dart';
+import '../states/AppState.dart';
+import '../widgets/Drawer.dart';
 import 'package:provider/provider.dart';
-import '../dataProvider/portalGorskiApi.dart';
+import '../dataProvider/DataLoader.dart';
 import '../widgets/RockWidget.dart';
 import 'dart:async';
 import 'dart:developer';
-import '../widgets/markerPopup.dart';
+import '../widgets/MarkerPopup.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 
 class Favorites extends StatefulWidget {

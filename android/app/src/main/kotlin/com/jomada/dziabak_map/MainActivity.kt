@@ -1,4 +1,4 @@
-package com.example.topo_map
+package com.jomada.dziabak_map
 
 import io.flutter.embedding.android.FlutterActivity
 

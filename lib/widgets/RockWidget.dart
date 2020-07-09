@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../states/appState.dart';
-import '../dataProvider/portalGorskiApi.dart';
+import '../states/AppState.dart';
+import '../dataProvider/DataLoader.dart';
 import 'RockDetails.dart';
 
 class RockWidget extends StatelessWidget {

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import '../pages/FavoritesPage.dart';
 import '../pages/MapPage.dart';
+import '../pages/InfoPage.dart';
 
 Drawer buildDrawer(BuildContext context, String currentRoute) {
   return Drawer(
     child: ListView(
       children: <Widget>[
         ListTile(
-          title: const Text('Topo'),
+          title: const Text('Mapa'),
           selected: currentRoute == TopoMap.route,
           onTap: () {
             Navigator.pushReplacementNamed(context, TopoMap.route);
@@ -20,19 +21,19 @@ Drawer buildDrawer(BuildContext context, String currentRoute) {
             Navigator.pushReplacementNamed(context, Favorites.route);
           },
         ),
-        ListTile(
-          title: const Text('Reklamy'),
-          //selected: currentRoute == Favorites.route,
-//          onTap: () {
-//            Navigator.pushReplacementNamed(context, Favorites.route);
-//          },
-        ),
+//        ListTile(
+//          title: const Text('Reklamy'),
+//          //selected: currentRoute == Favorites.route,
+////          onTap: () {
+////            Navigator.pushReplacementNamed(context, Favorites.route);
+////          },
+//        ),
         ListTile(
           title: const Text('Info'),
-          //selected: currentRoute == Favorites.route,
-//          onTap: () {
-//            Navigator.pushReplacementNamed(context, Favorites.route);
-          //},
+          selected: currentRoute == InfoPage.route,
+          onTap: () {
+            Navigator.pushReplacementNamed(context, InfoPage.route);
+          },
         ),
       ],
     ),

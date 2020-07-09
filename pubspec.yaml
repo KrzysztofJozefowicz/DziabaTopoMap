@@ -1,4 +1,4 @@
-name: topo_map
+name: dziabak_map
 description: A new Flutter application.
 
 # The following line prevents the package from being accidentally published to
@@ -49,6 +49,12 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: "^0.7.3"
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icon/icon.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -62,6 +68,10 @@ flutter:
   uses-material-design: true
   assets:
   - assets/rockApiData.json
+  fonts:
+      - family:  GitHubIcons
+        fonts:
+         - asset: assets/icon/github_icons.ttf
 
 
   # To add assets to your application, add an assets section, like this:

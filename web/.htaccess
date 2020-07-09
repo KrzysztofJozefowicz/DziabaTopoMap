@@ -1,5 +1,0 @@
- <ifModule mod_headers.c>
-    SetEnvIf Origin "http(s)?://(localhost:25120|domain.com|domain2.com)$" AccessControlAllowOrigin=$0
-    Header add Access-Control-Allow-Origin %{AccessControlAllowOrigin}e env=AccessControlAllowOrigin
-    Header always set Access-Control-Allow-Methods: "GET,POST,OPTIONS,DELETE,PUT"
- </ifModule> q

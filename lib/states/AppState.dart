@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../dataProvider/portalGorskiApi.dart';
+import '../dataProvider/DataLoader.dart';
 import 'package:latlong/latlong.dart';
 import 'dart:developer';
 import 'package:shared_preferences/shared_preferences.dart';
