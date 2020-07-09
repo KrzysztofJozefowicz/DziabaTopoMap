@@ -10,6 +10,7 @@ Niedługo aplikacja pojawi się w Play Store.
 
 ## Jak to wygląda?
 Wersja na Androida wygląda tak:
+
 <img src="https://github.com/KrzysztofJozefowicz/DziabaTopoMap/blob/master/imgs/DziabaTopoAndroid.jpg" width="250px">
 
 Wersja webowa dostępna jest [tutaj](https://krzysztofjozefowicz.github.io/DziabaTopoMap/ "tutaj"),
