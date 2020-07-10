@@ -90,7 +90,7 @@ class _ShowFavoritesState extends State<ShowFavorites> {
         ),
         onTap: () => setState(() {
           bool currentFavoriteState = !myState.FilterState["showOnlyFavorites"];
-          myState.SetFilterState("showOnlyFavorites", currentFavoriteState);
+          myState.setFilterState("showOnlyFavorites", currentFavoriteState);
         }),
       );
     });
@@ -130,7 +130,7 @@ class _ShowRocksWithRouteLevelState extends State<ShowRocksWithRouteLevel> {
     var myState = Provider.of<appState>(context, listen: true);
     Color boxColor = Colors.black;
     if (myState.FilterState[widget.filterName] == true) {
-      boxColor = _routeToColorMappings[myState.FilterContent[widget.filterName]];
+      boxColor = _routeToColorMappings[myState.filterContent[widget.filterName]];
     }
 //_routeIcons[myState.FilterContent[widget.filterName]]
     return Consumer<appState>(builder: (context, _filterState, _) {
@@ -139,15 +139,15 @@ class _ShowRocksWithRouteLevelState extends State<ShowRocksWithRouteLevel> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-                "Rocks with " + myState.FilterContent[widget.filterName],
+                "Rocks with " + myState.filterContent[widget.filterName],
                 style: TextStyle(color: Colors.black)
             ),
-            Icon(_routeIcons[myState.FilterContent[widget.filterName]], color: boxColor, size: 24.0)
+            Icon(_routeIcons[myState.filterContent[widget.filterName]], color: boxColor, size: 24.0)
           ],
         ),
         onTap: () => setState(() {
           bool currentFilterRouteState = !myState.FilterState[widget.filterName];
-          myState.SetFilterState(widget.filterName, currentFilterRouteState);
+          myState.setFilterState(widget.filterName, currentFilterRouteState);
         }),
       );
     });

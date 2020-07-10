@@ -15,12 +15,6 @@ void main() {
     ),
   );
 
-//  runApp(
-//    MultiProvider(
-//      providers: [ChangeNotifierProvider(builder: (context) => appState())],
-//      child: MyApp(),
-//    ),
-//  );
 }
 
 class MyApp extends StatelessWidget {
@@ -60,8 +54,8 @@ _loadPreferences(appState myState) async {
     if (prefs.getStringList("Favorites") != null && prefs.getStringList("Favorites").length > 0) {
       List<String> savedFavorites = prefs.getStringList("Favorites");
       for (var item in savedFavorites) {
-        myState.AddToFavorites(item);
-        myState.FilterContent["favorites"] = myState.favorites;
+        myState.addToFavorites(item);
+        myState.filterContent["favorites"] = myState.favorites;
       }
     }
   } else {

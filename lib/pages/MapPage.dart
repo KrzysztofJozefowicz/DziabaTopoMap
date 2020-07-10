@@ -60,10 +60,10 @@ class TopoMapPage extends State<TopoMap> {
                     future: futureData,
                     builder: (context, snapshot) {
                       if (snapshot.hasData && (snapshot.data["rock"].length != null)) {
-                        myState.PopulateRocks(snapshot.data["rock"]);
+                        myState.populateRocks(snapshot.data["rock"]);
                         myState.RocksIdToDisplay =
-                            ApplyFilters(myState.rocks, myState.FilterState, myState.FilterContent);
-                        MapMarkers myMarkers = new MapMarkers(myState.GetRocksItemsToDisplay());
+                            ApplyFilters(myState.rocks, myState.FilterState, myState.filterContent);
+                        MapMarkers myMarkers = new MapMarkers(myState.getRocksItemsToDisplay());
                         List<Marker> markers = myMarkers.markers;
                         List<Marker> markersEmpty = new List();
                         userLocationOptions = UserLocationOptions(
@@ -85,7 +85,7 @@ class TopoMapPage extends State<TopoMap> {
                               interactive: true,
                               onTap: (_) => setState(() {
                                 _popupLayerController.hidePopup();
-                                myState.ClearRockItem();
+                                myState.clearRockItem();
                               }),
                               center: LatLng(53.5, 19.09),
                               zoom: 5.0,

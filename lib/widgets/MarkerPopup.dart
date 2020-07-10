@@ -171,15 +171,15 @@ class _buildIconBarState extends State<_buildIconBar> {
         children: [
       InkWell(
           child: Container(
-            child: _favoriteIcons[myState.IsInFavorites(_rockItem.id)],
+            child: _favoriteIcons[myState.isInFavorites(_rockItem.id)],
           ),
           onTap: () => setState(() {
-                if (myState.IsInFavorites(_rockItem.id)) {
-                  myState.RemoveFromFavorites(_rockItem.id);
+                if (myState.isInFavorites(_rockItem.id)) {
+                  myState.removeFromFavorites(_rockItem.id);
                 } else {
-                  myState.AddToFavorites(_rockItem.id);
+                  myState.addToFavorites(_rockItem.id);
                 }
-                myState.FilterContent["favorites"] = myState.favorites;
+                myState.filterContent["favorites"] = myState.favorites;
               })),
       InkWell(
           child: Container(
