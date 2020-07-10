@@ -3,9 +3,6 @@ import '../states/AppState.dart';
 import '../widgets/Drawer.dart';
 import 'package:provider/provider.dart';
 import '../dataProvider/DataLoader.dart';
-import '../widgets/RockWidget.dart';
-import 'dart:async';
-import 'dart:developer';
 import '../widgets/MarkerPopup.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 
@@ -47,7 +44,7 @@ class FavoritesPage extends State<Favorites> {
     List<Widget> favoriteList = new List();
 
     for (var entry in myState.favorites) {
-      Item favoriteRock = myState.GetRockById(entry);
+      Item favoriteRock = myState.getRockById(entry);
       if (favoriteRock != null) {
         favoriteList.add(InkWell(
             child: _favoriteItem(myState, favoriteRock),
@@ -73,11 +70,13 @@ class FavoritesPage extends State<Favorites> {
         _routesBox(rockItem)
       ]),
       actionButtons(myState, rockItem),
-       Divider(color: Colors.black,
+      Divider(
+        color: Colors.black,
         height: 5,
         thickness: 1,
         indent: 0,
-        endIndent: 0,)
+        endIndent: 0,
+      )
     ]));
   }
 
@@ -90,15 +89,15 @@ class FavoritesPage extends State<Favorites> {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
       InkWell(
           child: Container(
-            child: _favoriteIcons[myState.IsInFavorites(rockItem.id)],
+            child: _favoriteIcons[myState.isInFavorites(rockItem.id)],
           ),
           onTap: () => setState(() {
-                if (myState.IsInFavorites(rockItem.id)) {
-                  myState.RemoveFromFavorites(rockItem.id);
+                if (myState.isInFavorites(rockItem.id)) {
+                  myState.removeFromFavorites(rockItem.id);
                 } else {
-                  myState.AddToFavorites(rockItem.id);
+                  myState.addToFavorites(rockItem.id);
                 }
-                myState.FilterContent["favorites"] = myState.favorites;
+                myState.filterContent["favorites"] = myState.favorites;
               })),
       InkWell(
           child: Container(
