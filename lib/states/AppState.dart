@@ -12,7 +12,7 @@ class  appState extends ChangeNotifier {
   Set<String> _rocksIdToDisplay = new Set();
   Map<String,Item> _rocks = new Map();
   Map<String,bool> _filterState = _defaultFilterState();
-  Map<String,dynamic> _filterContent = _defaultFilterContent() ;
+  Map<String,dynamic> filterContent = _defaultFilterContent() ;
   Map<String,bool> get FilterState => _filterState;
   bool isLoadedFromSharedPrefs = false;
   LatLng currentUserLocation;
@@ -21,60 +21,39 @@ class  appState extends ChangeNotifier {
 
 
 
-  Set<Item> GetRocksItemsFromIds(Iterable ItemsId)
-  {
-    Set<Item> RocksItems= new Set();
-    for (var element in ItemsId)
-      {
-        RocksItems.add(GetRockById(element));
-      }
-    return RocksItems;
-
-  }
   set RocksIdToDisplay(Iterable elements) {
     _rocksIdToDisplay = new Set();
     _rocksIdToDisplay.addAll(elements);
   }
 
-  Set<String> GetRocksIdToDisplay()
-  {
 
-    return _rocksIdToDisplay;
-  }
 
-  Set<Item> GetRocksItemsToDisplay()
+  Set<Item> getRocksItemsToDisplay()
   {
     Set<Item> rocksItemsToDisplay = new Set();
     for (var element in _rocksIdToDisplay)
       {
-        rocksItemsToDisplay.add(GetRockById(element));
+        rocksItemsToDisplay.add(getRockById(element));
       }
     return rocksItemsToDisplay;
   }
 
-  void SetFilterState(String key, bool value)
+  void setFilterState(String key, bool value)
   {
     _filterState[key] = value;
     notifyListeners();
   }
 
-  Map<String,dynamic> get FilterContent =>_filterContent ;
-  void SetFilterContent(String key, dynamic value)
+
+  void setFilterContent(String key, dynamic value)
   {
-    _filterContent[key] = value;
+    filterContent[key] = value;
     notifyListeners();
   }
 
-  String get url => _url;
-  set url(String  value) {
-    _url = value;
-    notifyListeners();
-  }
-  void SetRockUrl(String value)
-  {
-      _url = value;
-      notifyListeners();
-  }
+
+
+
 
   Item get rockItem => _rockItem;
   set rockItem (Item value) {
@@ -82,25 +61,17 @@ class  appState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void SetRockItem(Item value)
-  {
-    _rockItem = value;
-    notifyListeners();
-  }
 
-  void ClearRockItem()
+
+  void clearRockItem()
   {
     _rockItem = null;
     notifyListeners();
   }
 
-  void SetFavColor(Color color)
-  {
-    favColor = color;
-    notifyListeners();
-  }
 
-  void AddToFavorites(String id)
+
+  void addToFavorites(String id)
   {
     if (favorites == null)
       {
@@ -115,7 +86,7 @@ class  appState extends ChangeNotifier {
         notifyListeners();
       }
   }
-  void RemoveFromFavorites(String id)
+  void removeFromFavorites(String id)
   {
 
     if (favorites.contains(id) && favorites != null)
@@ -125,19 +96,19 @@ class  appState extends ChangeNotifier {
         notifyListeners();
       }
   }
-  bool IsInFavorites(String id)
+  bool isInFavorites(String id)
   {
     if (favorites != null) {
       return favorites.contains(id);
     }
     return false;
   }
-  void PopulateRocks(Map<String,Item> rocksFromApi)
+  void populateRocks(Map<String,Item> rocksFromApi)
   {
     _rocks = rocksFromApi;
   }
 
-  Item GetRockById(String id)
+  Item getRockById(String id)
   {
     return _rocks[id];
   }
