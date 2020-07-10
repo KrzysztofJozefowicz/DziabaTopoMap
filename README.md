@@ -7,6 +7,7 @@ Korzystanie z [topo.portalgorski.pl](http://topo.portalgorski.pl "topo.portalgor
 
 ## Jak zainstalować?
 Niedługo aplikacja pojawi się w Play Store.
+Aplikacje w formie pliku apk można ściągnąc i zainstalować z [releases](https://github.com/KrzysztofJozefowicz/DziabaTopoMap/releases)
 
 ## Jak to wygląda?
 Wersja na Androida wygląda tak:  
