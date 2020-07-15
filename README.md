@@ -6,7 +6,7 @@ Aplikacja na Androida oraz iOS pokazująca mapę z listą miejsc wspinaczki ska�
 Korzystanie z [topo.portalgorski.pl](http://topo.portalgorski.pl "topo.portalgorski.pl") na komórce było dla mnie mało wygodne, mapa utraciła swoją funkcjonalność.
 
 ## Jak zainstalować?
-Niedługo aplikacja pojawi się w Play Store.   
+Dla Androida: [Google Play Store](https://play.google.com/store/apps/details?id=com.jomada.dziabak_map)   
 Aplikacje w formie pliku apk można ściągnąc i zainstalować z [releases](https://github.com/KrzysztofJozefowicz/DziabaTopoMap/releases)
 
 ## Jak to wygląda?
