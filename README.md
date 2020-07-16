@@ -29,4 +29,4 @@ Covid-19 home project to learn Flutter.
 
 It shows map with climbing spots, each spot displays stats with option to navigate (using externals apps like Google Map or Locus), save to favorites and open in external browser detailed rock routes on topo.portalgorski.pl
 
-As userbase in only Polish, it is not planned to be translated to English.
+As userbase in only Polish, it is not planned to be translated to English. 
