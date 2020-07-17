@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import '../states/AppState.dart';
 import '../widgets/Drawer.dart';
 import 'package:provider/provider.dart';
-import '../dataProvider/DataLoader.dart';
+import '../dataProvider/RockLoader.dart';
 import '../widgets/MarkerPopup.dart';
 import 'package:maps_launcher/maps_launcher.dart';
+import '../widgets/RouteStatBoxes.dart';
+import '../Helpers/Helpers.dart';
 
 class Favorites extends StatefulWidget {
   static const String route = 'Favorites';
@@ -81,7 +83,7 @@ class FavoritesPage extends State<Favorites> {
   }
 
   Widget _routesBox(Rock rockItem) {
-    return Row(children: createColorBoxes(rockItem));
+    return Row(children: [createColorBoxes(rockItem)]);
   }
 
   Widget actionButtons(appState myState, Rock rockItem) {
@@ -112,7 +114,7 @@ class FavoritesPage extends State<Favorites> {
       InkWell(
           child: Container(child: Icon(Icons.open_in_new, color: Colors.blue, size: iconSize)),
           onTap: () => setState(() {
-                launchURL(context, rockItem.url);
+                launchURL(rockItem.url);
               })),
     ]);
   }
