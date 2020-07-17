@@ -178,7 +178,7 @@ class AreaSimple extends Item {
 }
 
 Map<String, int> _countRoutes(Map<String,dynamic> routesStats) {
-  Map<String, int> routesCount = {"III": 0, 'IV': 0, 'V': 0, 'VI': 0};
+  Map<String, int> routesCount = {"III": 0, 'IV': 0, 'V': 0, 'VI': 0,'VI.1': 0,'VI.2': 0,'VI.3': 0,'VI.4': 0, 'VI.5': 0,'VI.6': 0,'VI.7': 0,'VI.8': 0};
   for (var element in routesStats.keys) {
     if (element.contains(new RegExp(r'II.*')) ||
         element.contains(new RegExp(r'III.*'))) {
@@ -190,15 +190,47 @@ Map<String, int> _countRoutes(Map<String,dynamic> routesStats) {
       routesCount['IV'] += int.parse(routesStats[element]);
       continue;
     }
-
-    if (element.contains(new RegExp(r'VI.*'))) {
-      routesCount['VI'] += int.parse(routesStats[element]);
-      continue;
-    }
-    if (element.contains(new RegExp(r'V.*'))) {
+    if (element.contains(new RegExp(r'V[-+]'))) {
       routesCount['V'] += int.parse(routesStats[element]);
       continue;
     }
+    if (element.contains(new RegExp(r'VI[-+]'))) {
+      routesCount['VI'] += int.parse(routesStats[element]);
+      continue;
+    }
+    if (element.contains(new RegExp(r'VI\.1.*'))) {
+      routesCount['VI.1'] += int.parse(routesStats[element]);
+      continue;
+    }
+    if (element.contains(new RegExp(r'VI\.2.*'))) {
+      routesCount['VI.2'] += int.parse(routesStats[element]);
+      continue;
+    }
+    if (element.contains(new RegExp(r'VI\.3.*'))) {
+      routesCount['VI.3'] += int.parse(routesStats[element]);
+      continue;
+    }
+    if (element.contains(new RegExp(r'VI\.4.*'))) {
+      routesCount['VI.4'] += int.parse(routesStats[element]);
+      continue;
+    }
+    if (element.contains(new RegExp(r'VI\.5.*'))) {
+      routesCount['VI.5'] += int.parse(routesStats[element]);
+      continue;
+    }
+    if (element.contains(new RegExp(r'VI\.6.*'))) {
+      routesCount['VI.6'] += int.parse(routesStats[element]);
+      continue;
+    }
+    if (element.contains(new RegExp(r'VI\.7.*'))) {
+      routesCount['VI.7'] += int.parse(routesStats[element]);
+      continue;
+    }
+    if (element.contains(new RegExp(r'VI\.8.*'))) {
+      routesCount['VI.8'] += int.parse(routesStats[element]);
+      continue;
+    }
+
   }
   return routesCount;
 }
