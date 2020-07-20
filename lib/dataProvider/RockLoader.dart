@@ -69,9 +69,9 @@ class Rock extends Item {
   final String rockType;
   final String childSafe;
   final String hight;
-  final Map<String,dynamic> routesStats;
+
   final Map<String,int>  routesStatsSimplified;
-  Rock(this.id, this.lat, this.lng, this.title,this.description,this.url, this.rockType, this.childSafe,this.hight, this.routesStats, this.routesStatsSimplified);
+  Rock(this.id, this.lat, this.lng, this.title,this.description,this.url, this.rockType, this.childSafe,this.hight,  this.routesStatsSimplified);
   Rock.fromJson(Map<String, dynamic> json)
     : id = json["id"],
       lat = json["lat"],
@@ -82,7 +82,6 @@ class Rock extends Item {
       rockType = json['rockType '],
       childSafe=json['childSafe'],
       hight = json['hight'],
-      routesStats = json['routesStats'],
       routesStatsSimplified = _countRoutes(json['routesStats']);
 }
 
