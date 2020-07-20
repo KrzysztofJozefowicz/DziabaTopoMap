@@ -5,10 +5,11 @@ import 'package:latlong/latlong.dart';
 import 'package:dziabak_map/main.dart';
 import '../states/AppState.dart';
 import 'package:provider/provider.dart';
-import '../dataProvider/DataLoader.dart';
+import '../dataProvider/RockLoader.dart';
 import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
 import 'dart:async';
 import 'dart:developer';
+import '../Helpers/Helpers.dart';
 
 class MapFilters extends StatefulWidget {
   final MapController mapController;
@@ -35,13 +36,47 @@ class MapFiltersWidget extends State<MapFilters> with SingleTickerProviderStateM
 
   Widget ButtonsTogether() {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
         ShowFavorites(),
-        ShowRocksWithRouteLevel('III', "includeWithIII"),
-        ShowRocksWithRouteLevel('IV', "includeWithIV"),
-        ShowRocksWithRouteLevel('V', "includeWithV"),
-        ShowRocksWithRouteLevel('VI', "includeWithVI"),
+        SizedBox(height: 10),
+        Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[Text("Skały posiadające wycenę:",style: TextStyle(color: Colors.black)), ]
+        ),
+        SizedBox(height: 10),
+        Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget> [
+              ShowRocksWithRouteLevel('III', "includeWithIII"),
+              ShowRocksWithRouteLevel('IV', "includeWithIV"),
+              ShowRocksWithRouteLevel('V', "includeWithV"),
+              ShowRocksWithRouteLevel('VI', "includeWithVI"),]
+        ),
+        SizedBox(height: 10),
+        Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget> [
+              ShowRocksWithRouteLevel('VI.1', "includeWithVI.1"),
+              ShowRocksWithRouteLevel('VI.2', "includeWithVI.2"),
+              ShowRocksWithRouteLevel('VI.3', "includeWithVI.3"),
+              ShowRocksWithRouteLevel('VI.4', "includeWithVI.4"),]
+        ),
+        SizedBox(height: 10),
+        Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget> [
+              ShowRocksWithRouteLevel('VI.5', "includeWithVI.5"),
+              ShowRocksWithRouteLevel('VI.6', "includeWithVI.6"),
+              ShowRocksWithRouteLevel('VI.7', "includeWithVI.7"),
+              ShowRocksWithRouteLevel('VI.8', "includeWithVI.8"),
+            ]
+        ),
+
+
+
       ],
     );
   }
@@ -84,9 +119,9 @@ class _ShowFavoritesState extends State<ShowFavorites> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-              Text("Favorites only",
-                  style: TextStyle( color: Colors.black)),
-              _icons[myState.FilterState["showOnlyFavorites"]]],
+            Text("Tylko Ulubione", style: TextStyle(color: Colors.black)),
+            _icons[myState.FilterState["showOnlyFavorites"]]
+          ],
         ),
         onTap: () => setState(() {
           bool currentFavoriteState = !myState.FilterState["showOnlyFavorites"];
@@ -111,39 +146,41 @@ class ShowRocksWithRouteLevel extends StatefulWidget {
 class _ShowRocksWithRouteLevelState extends State<ShowRocksWithRouteLevel> {
   _ShowRocksWithRouteLevelState();
 
-  Map<String, IconData> _routeIcons = {
-    "III": Icons.filter_3,
-    "IV": Icons.filter_4,
-    "V": Icons.filter_5,
-    "VI": Icons.filter_6,
-  };
+
 
   Map<String, Color> _routeToColorMappings = {
     "III": Colors.lightGreen,
     "IV": Colors.cyan,
     "V": Colors.yellow,
-    "VI": Colors.red
+    "VI": Colors.pink[100],
+    "VI.1": Colors.pink[200],
+    "VI.2": Colors.pink[300],
+    "VI.3": Colors.pink[400],
+    "VI.4": Colors.pink[500],
+    "VI.5": Colors.pink[600],
+    "VI.6": Colors.pink[700],
+    "VI.7": Colors.pink[800],
+    "VI.8": Colors.pink[900],
   };
 
   @override
   Widget build(BuildContext context) {
     var myState = Provider.of<appState>(context, listen: true);
-    Color boxColor = Colors.black;
+    Color boxColor = Colors.transparent;
+
+    String boxName = myState.filterContent[widget.filterName];
     if (myState.FilterState[widget.filterName] == true) {
+
       boxColor = _routeToColorMappings[myState.filterContent[widget.filterName]];
     }
-//_routeIcons[myState.FilterContent[widget.filterName]]
+
     return Consumer<appState>(builder: (context, _filterState, _) {
       return InkWell(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-                "Rocks with " + myState.filterContent[widget.filterName],
-                style: TextStyle(color: Colors.black)
-            ),
-            Icon(_routeIcons[myState.filterContent[widget.filterName]], color: boxColor, size: 24.0)
-          ],
+        child: Container(
+
+          child:
+            DrawBox(boxName,boxColor),
+
         ),
         onTap: () => setState(() {
           bool currentFilterRouteState = !myState.FilterState[widget.filterName];
@@ -154,35 +191,72 @@ class _ShowRocksWithRouteLevelState extends State<ShowRocksWithRouteLevel> {
   }
 }
 
-Set<String> ApplyFilters(
-    Map<String, Item> itemsToFilter, Map<String, bool> filtersState, Map<String, dynamic> filtersContent) {
-  Set<String> filteredItems = new Set();
+Widget DrawBox(String boxText, Color fillColor) {
+  return (
+      Stack(
+      children: [
+        Container(
+          width: 30,
+          height: 30,
+          child: CustomPaint(painter: BoxPainter(Colors.black,PaintingStyle.stroke),),
+        ),
+        Container(
+          width: 30,
+          height: 30,
+          child: CustomPaint(painter: BoxPainter(fillColor,PaintingStyle.fill),),
+        ),
 
-  Map<String, Rock> rocks = itemsToFilter;
+  Align(
+  heightFactor: 1.5,
 
-  filteredItems.addAll(rocks.keys);
+  child:
+          SizedBox(
+            width: 30,
+            height: 30,
+            child: Text(
+              boxText,
+              style:TextStyle(color: Colors.black, fontSize: 12),
+              textAlign: TextAlign.center,
+          ),
+          ),
+  )
+//        Align(
+//          heightFactor: 1.5,
+//
+//          child: Text(
+//            boxText,
+//            style:TextStyle(color: Colors.black),
+//            textAlign: TextAlign.right,
+//          ),
+//        ),
+        //Align(child:Text(boxText,style:TextStyle(color: Colors.black), textAlign: TextAlign.center,), alignment: Alignment.center, ),
 
-  if (filtersState["showOnlyFavorites"] == true) {
-    log("favorites ids");
-    log(filtersContent["favorites"].toString());
-    for (var rockId in rocks.keys) {
-      if (filtersContent["favorites"].contains(rockId) != true) {
-        filteredItems.remove(rockId);
-      }
-    }
-  }
-  List<String> routeFilters = ["includeWithIII", "includeWithIV", "includeWithV", "includeWithVI"];
-  for (var filter in routeFilters) {
-    if (filtersState[filter] == true) {
-      String currentRouteLevel = filtersContent[filter];
-      for (var rock in rocks.values) {
-        if (rock.routesStatsSimplified[currentRouteLevel] == 0) {
-          filteredItems.remove(rock.id);
-        }
-      }
-    }
-  }
-  return filteredItems;
+      ])
+      );
+
 }
 
+class BoxPainter extends CustomPainter {
+  Color fillColor;
+  PaintingStyle paintStyle ;
+  BoxPainter(Color fillColor, PaintingStyle paintStyle)
+  {
+    this.fillColor = fillColor;
+    this.paintStyle = paintStyle;
+  }
+  @override
+  void paint(Canvas canvas, Size size) {
+    var painter = Paint();
+    painter.style = paintStyle;
+    painter.strokeWidth = 2.5;
+    painter.color = fillColor;
+    Radius cornerRadius = new Radius.circular(4);
+    RRect box = RRect.fromLTRBR(0, 0, 30, 30, cornerRadius);
+    //a rectangle
+    canvas.drawRRect(box, painter);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => true;
+}
 

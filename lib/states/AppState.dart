@@ -124,6 +124,14 @@ class  appState extends ChangeNotifier {
     filterState["includeWithIV"]=false;
     filterState["includeWithV"]=false;
     filterState["includeWithVI"]=false;
+    filterState["includeWithVI.1"]=false;
+    filterState["includeWithVI.2"]=false;
+    filterState["includeWithVI.3"]=false;
+    filterState["includeWithVI.4"]=false;
+    filterState["includeWithVI.5"]=false;
+    filterState["includeWithVI.6"]=false;
+    filterState["includeWithVI.7"]=false;
+    filterState["includeWithVI.8"]=false;
     return (filterState);
   }
   static Map<String,dynamic> _defaultFilterContent()
@@ -134,6 +142,14 @@ class  appState extends ChangeNotifier {
     filterContent["includeWithIV"]="IV";
     filterContent["includeWithV"]="V";
     filterContent["includeWithVI"]="VI";
+    filterContent["includeWithVI.1"]="VI.1";
+    filterContent["includeWithVI.2"]="VI.2";
+    filterContent["includeWithVI.3"]="VI.3";
+    filterContent["includeWithVI.4"]="VI.4";
+    filterContent["includeWithVI.5"]="VI.5";
+    filterContent["includeWithVI.6"]="VI.6";
+    filterContent["includeWithVI.7"]="VI.7";
+    filterContent["includeWithVI.8"]="VI.8";
     return (filterContent);
   }
 }
