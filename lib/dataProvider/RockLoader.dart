@@ -17,28 +17,19 @@ Future<Map<String, Map<String,Item>>> loadAsset() async {
 
 Map<String, Map<String,Item>> groupItemsByType(Map<String, dynamic> json) {
   Map<String, Map<String,Item>> sortedItems = {
-    "area": Map<String,Area>(),
-    "area_simple": Map<String,AreaSimple>(),
     "rock": Map<String,Rock>(),
-    "sector": Map<String,Sector>()
   };
 
 
    for (Map<String,dynamic> item in json.values)
    {
     Item i = Item.getItemFromJson(item);
-    if (i.type == "area" ) {
-      sortedItems["area"][i.id]=i;
-    }
+
     if (i.type == "rock") {
       sortedItems["rock"][i.id]=i;
     }
-    if (i.type == "sector") {
-      sortedItems["sector"][i.id]=i;
-    }
-    if (i.type == "area_simple") {
-      sortedItems["area_simple"][i.id]=i;
-    }
+
+
   }
   return sortedItems;
 }
@@ -61,68 +52,12 @@ abstract class Item {
       {
         return Rock.fromJson(json);
       }
-    if (json.containsKey("type") && json["type"]=='sector')
-    {
-      return Sector.fromJson(json);
-    }
-    if (json.containsKey("type") && json["type"]=='area')
-    {
-      return Area.fromJson(json);
-    }
-    if (json.containsKey("type") == false)
-      {
-        return AreaSimple.fromJson(json);
-      }
+
 
   }
 }
 
-class Area extends Item {
-  final String id;
-  final String lat;
-  final String lng;
-  final String title;
-  final String description;
-  final String type;
-  final String url;
-  final String img;
-  final String gpsPointsList;
-  Area(this.id, this.lat, this.lng, this.title,this.description,this.type,this.url,this.img,this.gpsPointsList);
-  Area.fromJson(Map<String, dynamic> json)
-      : id = json["id"],
-        lat = json["lat"],
-        lng = json['lng'],
-        title = json['title'],
-        description = json['description'],
-        type = json['type'],
-        url = json['url'],
-        img = json['img'],
-        gpsPointsList = json["gpsPointsList"];
-}
 
-class Sector extends Item {
-  final String id;
-  final String lat;
-  final String lng;
-  final String title;
-  final String description;
-  final String type;
-  final String url;
-  final String img;
-  final String gpsPointsList;
-  Sector(this.id, this.lat, this.lng, this.title,this.description,this.type,this.url,this.img,this.gpsPointsList);
-  Sector.fromJson(Map<String, dynamic> json)
-      : id = json["id"],
-        lat = json["lat"],
-        lng = json['lng'],
-        title = json['title'],
-        description = json['description'],
-        type = json['type'],
-        url = json['url'],
-        img = json['img'],
-        gpsPointsList = json["gpsPointsList"];
-
-}
 
 class Rock extends Item {
   final String id;
@@ -155,27 +90,6 @@ class Rock extends Item {
       routesStatsSimplified = _countRoutes(json['routesStats']);
 }
 
-class AreaSimple extends Item {
-  final String id;
-  final String lat;
-  final String lng;
-  final String title;
-  final String description;
-  final String type;
-  final String url;
-  final String img;
-  AreaSimple(this.id, this.lat, this.lng, this.title,this.description,this.type,this.url,this.img);
-  AreaSimple.fromJson(Map<String, dynamic> json)
-      : id = "",
-        lat = "",
-        lng = "",
-        title = "",
-        description = "",
-        type = "area_simple",
-        url = json['url'],
-        img = json['img'];
-
-}
 
 Map<String, int> _countRoutes(Map<String,dynamic> routesStats) {
   Map<String, int> routesCount = {"III": 0, 'IV': 0, 'V': 0, 'VI': 0,'VI.1': 0,'VI.2': 0,'VI.3': 0,'VI.4': 0, 'VI.5': 0,'VI.6': 0,'VI.7': 0,'VI.8': 0};
