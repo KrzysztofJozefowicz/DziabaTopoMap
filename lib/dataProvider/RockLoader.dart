@@ -1,40 +1,26 @@
 import 'dart:convert' show json;
 import 'package:flutter/services.dart' show rootBundle;
 
-
-
-Future<Map<String, Map<String,Item>>> fetchData() async
-{
-
-  return await  loadAsset();
+Future<Map<String, Map<String, Item>>> fetchData() async {
+  return await loadAsset();
 }
 
-Future<Map<String, Map<String,Item>>> loadAsset() async {
-  final response =  await rootBundle.loadString('assets/rockApiData.json');
+Future<Map<String, Map<String, Item>>> loadAsset() async {
+  final response = await rootBundle.loadString('assets/rockApiData.json');
   return groupItemsByType(json.decode(response));
 }
 
-
-Map<String, Map<String,Item>> groupItemsByType(Map<String, dynamic> json) {
-  Map<String, Map<String,Item>> sortedItems = {
-    "rock": Map<String,Rock>(),
+Map<String, Map<String, Item>> groupItemsByType(Map<String, dynamic> json) {
+  Map<String, Map<String, Item>> sortedItems = {
+    "rock": Map<String, Rock>(),
   };
 
-
-   for (Map<String,dynamic> item in json.values)
-   {
+  for (Map<String, dynamic> item in json.values) {
     Item i = Item.getItemFromJson(item);
-
-    if (i.type == "rock") {
-      sortedItems["rock"][i.id]=i;
-    }
-
-
-  }
+      sortedItems["rock"][i.id] = i;
+      }
   return sortedItems;
 }
-
-
 
 abstract class Item {
   String id;
@@ -45,19 +31,13 @@ abstract class Item {
   String type;
   String url;
   String img;
+
   Item();
-  factory  Item.getItemFromJson(Map<String, dynamic> json)
-  {
-    if (json.containsKey("type") && json["type"]=='rock')
-      {
-        return Rock.fromJson(json);
-      }
 
-
+  factory Item.getItemFromJson(Map<String, dynamic> json) {
+      return Rock.fromJson(json);
   }
 }
-
-
 
 class Rock extends Item {
   final String id;
@@ -70,27 +50,41 @@ class Rock extends Item {
   final String childSafe;
   final String hight;
 
-  final Map<String,int>  routesStatsSimplified;
-  Rock(this.id, this.lat, this.lng, this.title,this.description,this.url, this.rockType, this.childSafe,this.hight,  this.routesStatsSimplified);
+  final Map<String, int> routesStatsSimplified;
+
+  Rock(this.id, this.lat, this.lng, this.title, this.description, this.url, this.rockType, this.childSafe, this.hight,
+      this.routesStatsSimplified);
+
   Rock.fromJson(Map<String, dynamic> json)
-    : id = json["id"],
-      lat = json["lat"],
-      lng = json['lng'],
-      title = json['title'],
-      description = json['description'],
-      url = json['url'],
-      rockType = json['rockType '],
-      childSafe=json['childSafe'],
-      hight = json['hight'],
-      routesStatsSimplified = _countRoutes(json['routesStats']);
+      : id = json["id"],
+        lat = json["lat"],
+        lng = json['lng'],
+        title = json['title'],
+        description = json['description'],
+        url = json['infoPage'],
+        rockType = json['rockType '],
+        childSafe = json['childSafe'],
+        hight = json['hight'],
+        routesStatsSimplified = _countRoutes(json['routesStats']);
 }
 
-
-Map<String, int> _countRoutes(Map<String,dynamic> routesStats) {
-  Map<String, int> routesCount = {"III": 0, 'IV': 0, 'V': 0, 'VI': 0,'VI.1': 0,'VI.2': 0,'VI.3': 0,'VI.4': 0, 'VI.5': 0,'VI.6': 0,'VI.7': 0,'VI.8': 0};
+Map<String, int> _countRoutes(Map<String, dynamic> routesStats) {
+  Map<String, int> routesCount = {
+    "III": 0,
+    'IV': 0,
+    'V': 0,
+    'VI': 0,
+    'VI.1': 0,
+    'VI.2': 0,
+    'VI.3': 0,
+    'VI.4': 0,
+    'VI.5': 0,
+    'VI.6': 0,
+    'VI.7': 0,
+    'VI.8': 0
+  };
   for (var element in routesStats.keys) {
-    if (element.contains(new RegExp(r'II.*')) ||
-        element.contains(new RegExp(r'III.*'))) {
+    if (element.contains(new RegExp(r'II.*')) || element.contains(new RegExp(r'III.*'))) {
       routesCount['III'] += int.parse(routesStats[element]);
       continue;
     }
@@ -139,8 +133,6 @@ Map<String, int> _countRoutes(Map<String,dynamic> routesStats) {
       routesCount['VI.8'] += int.parse(routesStats[element]);
       continue;
     }
-
   }
   return routesCount;
 }
-
