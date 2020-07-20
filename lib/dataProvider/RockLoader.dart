@@ -29,7 +29,7 @@ abstract class Item {
   String title;
   String description;
   String type;
-  String url;
+  List<dynamic> infoPage;
   String img;
 
   Item();
@@ -45,14 +45,14 @@ class Rock extends Item {
   final String lng;
   final String title;
   final String description;
-  final String url;
+  final List<dynamic> infoPage;
   final String rockType;
   final String childSafe;
   final String hight;
 
   final Map<String, int> routesStatsSimplified;
 
-  Rock(this.id, this.lat, this.lng, this.title, this.description, this.url, this.rockType, this.childSafe, this.hight,
+  Rock(this.id, this.lat, this.lng, this.title, this.description, this.infoPage, this.rockType, this.childSafe, this.hight,
       this.routesStatsSimplified);
 
   Rock.fromJson(Map<String, dynamic> json)
@@ -61,7 +61,7 @@ class Rock extends Item {
         lng = json['lng'],
         title = json['title'],
         description = json['description'],
-        url = json['infoPage'],
+        infoPage = json['infoPage'],
         rockType = json['rockType '],
         childSafe = json['childSafe'],
         hight = json['hight'],

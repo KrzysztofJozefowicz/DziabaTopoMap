@@ -56,7 +56,8 @@ class buildIconBarState extends State<buildIconBar> {
               child: Container(
                   child: Icon(Icons.info, color: Colors.blue, size: iconSize)),
               onTap: () => setState(() {
-                launchURL(_rockItem.url);
+                //FIXME: hardoced infoPage to topo.portalgorski.pl !!!
+                launchURL(_rockItem.infoPage[0]["topo.portalgorski.pl"]);
               })),
 
           InkWell(

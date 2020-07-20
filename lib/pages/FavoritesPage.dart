@@ -114,7 +114,7 @@ class FavoritesPage extends State<Favorites> {
       InkWell(
           child: Container(child: Icon(Icons.open_in_new, color: Colors.blue, size: iconSize)),
           onTap: () => setState(() {
-                launchURL(rockItem.url);
+                launchURL(rockItem.infoPage[0]["topo.portalgorski.pl"]);
               })),
     ]);
   }
