@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../widgets/Drawer.dart';
-import '../widgets/GitHubIcon.dart';
+import '../Helpers/CustomIcons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class InfoPage extends StatefulWidget {
