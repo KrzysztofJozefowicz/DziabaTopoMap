@@ -72,6 +72,9 @@ flutter:
       - family:  GitHubIcons
         fonts:
          - asset: assets/icon/github_icons.ttf
+      - family:  GlobeIcons
+        fonts:
+         - asset: assets/icon/globe_icon.ttf
 
 
   # To add assets to your application, add an assets section, like this:
