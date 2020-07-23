@@ -272,7 +272,8 @@
         "description": "",
         "infoPage": [
             {
-                "topo.portalgorski.pl": "http://topo.portalgorski.pl/Wie\u017cyca,Boles\u0142awiec,Pog\u00f3rze-Sudeckie,Sudety,skala,760"
+                "topo.portalgorski.pl": "http://topo.portalgorski.pl/Wie\u017cyca,Boles\u0142awiec,Pog\u00f3rze-Sudeckie,Sudety,skala,760",
+                "topo.wspinka.org": "https://topo.wspinka.org/kaczawy/wiezyca-skala-z-medalionem"
             }
         ],
         "rockType": "piaskowiec",
@@ -430,7 +431,8 @@
         "description": "",
         "infoPage": [
             {
-                "topo.portalgorski.pl": "http://topo.portalgorski.pl/Diablak,Z\u0142otoryja,Pog\u00f3rze-Sudeckie,Sudety,skala,758"
+                "topo.portalgorski.pl": "http://topo.portalgorski.pl/Diablak,Z\u0142otoryja,Pog\u00f3rze-Sudeckie,Sudety,skala,758",
+                "topo.wspinka.org" : "https://topo.wspinka.org/kaczawy/diablak"
             }
         ],
         "rockType": "zlepieniec",
