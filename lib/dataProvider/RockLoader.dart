@@ -22,14 +22,22 @@ Map<String, Map<String, Item>> groupItemsByType(Map<String, dynamic> json) {
   return sortedItems;
 }
 
+class InfoPage{
+  String displayName;
+  String url;
+  InfoPage(String dislayName,String url)
+  {
+    this.displayName=dislayName;
+    this.url = url;
+  }
+}
 abstract class Item {
   String id;
   String lat;
   String lng;
   String title;
   String description;
-  String type;
-  List<dynamic> infoPage;
+  List<InfoPage> infoPage;
   String img;
 
   Item();
@@ -45,7 +53,7 @@ class Rock extends Item {
   final String lng;
   final String title;
   final String description;
-  final List<dynamic> infoPage;
+  final List<InfoPage> infoPage;
   final String rockType;
   final String childSafe;
   final String hight;
@@ -61,13 +69,27 @@ class Rock extends Item {
         lng = json['lng'],
         title = json['title'],
         description = json['description'],
-        infoPage = json['infoPage'],
+        infoPage = _populateInfoPage(json['infoPage']),
         rockType = json['rockType '],
         childSafe = json['childSafe'],
         hight = json['hight'],
         routesStatsSimplified = _countRoutes(json['routesStats']);
 }
 
+List<InfoPage> _populateInfoPage(List<dynamic> jsonInfoPage)
+{
+  List<InfoPage> internalInfoPage = new List();
+  for (var element in jsonInfoPage)
+    {
+      for (var key in element.keys)
+        {
+          internalInfoPage.add(InfoPage(key,element[key]));
+        }
+
+    }
+  return(internalInfoPage);
+
+}
 Map<String, int> _countRoutes(Map<String, dynamic> routesStats) {
   Map<String, int> routesCount = {
     "III": 0,
