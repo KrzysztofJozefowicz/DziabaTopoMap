@@ -56,11 +56,11 @@ class Rock extends Item {
   final List<InfoPage> infoPage;
   final String rockType;
   final String childSafe;
-  final String hight;
+  final String hights;
 
   final Map<String, int> routesStatsSimplified;
 
-  Rock(this.id, this.lat, this.lng, this.title, this.description, this.infoPage, this.rockType, this.childSafe, this.hight,
+  Rock(this.id, this.lat, this.lng, this.title, this.description, this.infoPage, this.rockType, this.childSafe, this.hights,
       this.routesStatsSimplified);
 
   Rock.fromJson(Map<String, dynamic> json)
@@ -70,12 +70,21 @@ class Rock extends Item {
         title = json['title'],
         description = json['description'],
         infoPage = _populateInfoPage(json['infoPage']),
-        rockType = json['rockType '],
-        childSafe = json['childSafe'],
-        hight = json['hight'],
+        rockType = returnStringOrEmptyString(json['rockType']),
+        childSafe = returnStringOrEmptyString(json['childSafe']),
+        hights = returnStringOrEmptyString(json['hights']),
         routesStatsSimplified = _countRoutes(json['routesStats']);
 }
 
+String returnStringOrEmptyString(String json)
+{
+  String returnString = "";
+  if (json != null)
+    {
+      returnString=json;
+    }
+  return returnString;
+}
 List<InfoPage> _populateInfoPage(List<dynamic> jsonInfoPage)
 {
   List<InfoPage> internalInfoPage = new List();
