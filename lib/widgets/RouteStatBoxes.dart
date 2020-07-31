@@ -5,12 +5,10 @@ import 'dart:developer';
 
 Widget createColorBoxes(dynamic rockData) {
   dynamic rock;
-  if (rockData is RockMarker)
-  {
+  if (rockData is RockMarker) {
     rock = rockData.rock.RockData;
   }
-  if (rockData is Rock)
-  {
+  if (rockData is Rock) {
     rock = rockData;
   }
 
@@ -30,11 +28,9 @@ Widget createColorBoxes(dynamic rockData) {
     "VI.6": Colors.pink[700],
     "VI.7": Colors.pink[800],
     "VI.8": Colors.pink[900],
-
   };
 
   for (var route in rock.routesStatsSimplified.keys) {
-
     double boxHeight = 1.0;
     Color boxColor = routeToColorMappings[route];
     if (rock.routesStatsSimplified[route] > 0 && rock.routesStatsSimplified[route] < 3) {
@@ -49,8 +45,7 @@ Widget createColorBoxes(dynamic rockData) {
     if (rock.routesStatsSimplified[route] >= 10) {
       boxHeight = 42.0;
     }
-    routesBoxesStripe.add(
-        Stack(
+    routesBoxesStripe.add(Stack(
       alignment: Alignment.bottomCenter,
       children: <Widget>[
         SizedBox(width: 20.0, height: boxHeight, child: DecoratedBox(decoration: BoxDecoration(color: boxColor))),
@@ -58,46 +53,23 @@ Widget createColorBoxes(dynamic rockData) {
             width: 20.0,
             height: 10.0,
             child: Center(
-                child:
-            Text(
+                child: Text(
 //                route + ":" + rock.routesStatsSimplified[route].toString(),
-                rock.routesStatsSimplified[route].toString(),
-                style: TextStyle(
-                    color:Colors.black,
-                    fontSize: 10
-
-                )
-            )
-
-
-            )),
+                    rock.routesStatsSimplified[route].toString(),
+                    style: TextStyle(color: Colors.black, fontSize: 10)))),
       ],
     ));
-    routesLegendStripe.add(
-      SizedBox(
-          width: 20.0,
-          height: 10.0,
-          child: Center(
-          child:
-
-      Text(route,
-          style: TextStyle(
-              color:Colors.black,
-              fontSize: 10
-          )
-        ))));
-
-
-
+    routesLegendStripe.add(SizedBox(
+        width: 20.0,
+        height: 10.0,
+        child: Center(child: Text(route, style: TextStyle(color: Colors.black, fontSize: 10)))));
   }
-
-
 
   //return routesBoxesStripe;
   return Column(
-      children: [
-        Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: routesBoxesStripe),
-        Row(children:routesLegendStripe)],);
+    children: [
+      Row(crossAxisAlignment: CrossAxisAlignment.end, children: routesBoxesStripe),
+      Row(children: routesLegendStripe)
+    ],
+  );
 }
