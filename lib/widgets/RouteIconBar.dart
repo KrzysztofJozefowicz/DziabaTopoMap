@@ -5,9 +5,8 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:provider/provider.dart';
 import '../states/AppState.dart';
 import 'package:maps_launcher/maps_launcher.dart';
-import '../Helpers/Helpers.dart';
+import '../widgets/PopupMenuOpenUrl.dart';
 import 'package:latlong/latlong.dart';
-import '../Helpers/CustomIcons.dart';
 import 'dart:developer';
 
 class buildIconBar extends StatefulWidget {
@@ -72,45 +71,7 @@ class buildIconBarState extends State<buildIconBar> {
     ]);
   }
 
-  PopupMenuButton<String> DropDownOpenInfoPage(List<InfoPage> infoPage) {
 
-
-    return PopupMenuButton<String>(
-      color: Theme.of(context).primaryColor,
-      icon: Icon(
-        Icons.info,
-        color: Colors.red,
-        size: iconSize,
-
-      ),
-      offset: Offset(105,200),
-      itemBuilder: (context) => GeneratePopupMenuItem(infoPage),
-
-      onSelected: (value) {
-        launchURL(value);
-      },
-    );
-
-  }
-  List<PopupMenuItem<String>> GeneratePopupMenuItem(List<InfoPage> infoPage)
-  {
-    List<PopupMenuItem<String>>myList = new List();
-    for (var element in infoPage)
-      {
-        myList.add(
-            new PopupMenuItem<String>(
-                value: element.url,
-
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget> [
-                    Icon(GlobIcon.globe, color: Colors.black,),
-                    SizedBox(width: 10,),
-                    Text(element.displayName, style: TextStyle(color: Colors.black))],
-                )
-            ));
-      }
-    return myList;
   }
   final Map<bool, Widget> _favoriteIcons = {
     false: Icon(
@@ -124,4 +85,5 @@ class buildIconBarState extends State<buildIconBar> {
       size: 30.0,
     )
   };
-}
+
+
