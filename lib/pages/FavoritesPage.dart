@@ -3,10 +3,9 @@ import '../states/AppState.dart';
 import '../widgets/Drawer.dart';
 import 'package:provider/provider.dart';
 import '../dataProvider/RockLoader.dart';
-import '../widgets/MarkerPopup.dart';
 import 'package:maps_launcher/maps_launcher.dart';
 import '../widgets/RouteStatBoxes.dart';
-import '../Helpers/Helpers.dart';
+import '../widgets/PopupMenuOpenUrl.dart';
 
 class Favorites extends StatefulWidget {
   static const String route = 'Favorites';
@@ -19,6 +18,7 @@ class Favorites extends StatefulWidget {
 
 class FavoritesPage extends State<Favorites> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final double iconSize = 30.0;
 
   @override
   void initState() {
@@ -48,14 +48,7 @@ class FavoritesPage extends State<Favorites> {
     for (var entry in myState.favorites) {
       Item favoriteRock = myState.getRockById(entry);
       if (favoriteRock != null) {
-        favoriteList.add(InkWell(
-            child: _favoriteItem(myState, favoriteRock),
-            onTap: () => setState(() {
-//                  if (myState.rockItem != favoriteRock){
-//                  myState.rockItem = favoriteRock;}
-//                  else
-//                    {myState.rockItem=null;}
-                })));
+        favoriteList.add(InkWell(child: _favoriteItem(myState, favoriteRock), onTap: () => setState(() {})));
       }
     }
     return favoriteList;
@@ -69,8 +62,11 @@ class FavoritesPage extends State<Favorites> {
           rockItem.title,
           style: TextStyle(color: Colors.black),
         ),
-        _routesBox(rockItem)
       ]),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[_routesBox(rockItem)],
+      ),
       actionButtons(myState, rockItem),
       Divider(
         color: Colors.black,
@@ -83,11 +79,10 @@ class FavoritesPage extends State<Favorites> {
   }
 
   Widget _routesBox(Rock rockItem) {
-    return Row(children: [createColorBoxes(rockItem)]);
+    return Container(child: createColorBoxes(rockItem));
   }
 
   Widget actionButtons(appState myState, Rock rockItem) {
-    final double iconSize = 30.0;
     return Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
       InkWell(
           child: Container(
@@ -111,11 +106,12 @@ class FavoritesPage extends State<Favorites> {
           onTap: () => setState(() {
                 MapsLauncher.launchCoordinates(double.parse(rockItem.lat), double.parse(rockItem.lng));
               })),
-      InkWell(
-          child: Container(child: Icon(Icons.open_in_new, color: Colors.blue, size: iconSize)),
+      InkWell(child: DropDownOpenInfoPage(rockItem.infoPage)
+          /*child: Container(child: Icon(Icons.open_in_new, color: Colors.blue, size: iconSize)),
           onTap: () => setState(() {
-                launchURL(rockItem.infoPage[0]["topo.portalgorski.pl"]);
-              })),
+                launchURL(rockItem.infoPage[0].url);
+              })*/
+          ),
     ]);
   }
 
