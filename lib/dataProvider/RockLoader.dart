@@ -15,7 +15,7 @@ Map<String, Map<String, Item>> groupItemsByType(Map<String, dynamic> json) {
     "rock": Map<String, Rock>(),
   };
 
-  for (Map<String, dynamic> item in json.values) {
+  for (Map<String, dynamic> item in json["data"].values) {
     Item i = Item.getItemFromJson(item);
       sortedItems["rock"][i.id] = i;
       }
