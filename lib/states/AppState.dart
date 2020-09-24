@@ -3,6 +3,7 @@ import '../dataProvider/RockLoader.dart';
 import 'package:latlong/latlong.dart';
 import 'dart:developer';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../widgets/JsonHandler.dart';
 
 class  AppState extends ChangeNotifier {
   String _url = "";
@@ -17,9 +18,7 @@ class  AppState extends ChangeNotifier {
   bool isLoadedFromSharedPrefs = false;
   LatLng currentUserLocation;
   LatLng currentMapLocation;
-
-
-
+  JsonObject jsonAsset = new JsonObject();
 
   set rocksIdToDisplay(Iterable elements) {
     _rocksIdToDisplay = new Set();
