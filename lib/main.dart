@@ -4,7 +4,9 @@ import 'package:dziabak_map/pages/FavoritesPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import './pages/MapPage.dart';
 import './pages/InfoPage.dart';
+import './pages/SettingsPage.dart';
 import './states/AppState.dart';
+
 import 'dart:developer';
 
 void main() {
@@ -42,7 +44,7 @@ class MyApp extends StatelessWidget {
         TopoMap.route: (context) => TopoMap(),
         Favorites.route: (context) => Favorites(),
         InfoPage.route: (context) => InfoPage(),
-
+        SettingsPage.route: (context) => SettingsPage(),
       },
     );
   }
