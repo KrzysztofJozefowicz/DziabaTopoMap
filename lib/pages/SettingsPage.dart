@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../widgets/Drawer.dart';
+import '../widgets/JsonHandler.dart';
+import '../states/AppState.dart';
+import 'package:provider/provider.dart';
 
 class SettingsPage extends StatefulWidget {
   static const String route = 'SettingsPage';
@@ -13,14 +16,16 @@ class SettingsPage extends StatefulWidget {
 
 class SettingsPageState extends State<SettingsPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
+  TextEditingController _textFieldcontroller ;
   @override
   void initState() {
     super.initState();
+    _textFieldcontroller  = new TextEditingController(text: 'https://github.com/KrzysztofJozefowicz/DziabaTopoMap/blob/master/assets/rockApiData.json');
   }
 
   @override
   Widget build(BuildContext context) {
+    var myState = Provider.of<AppState>(context, listen: true);
     return Scaffold(
         backgroundColor: Colors.orangeAccent,
         key: _scaffoldKey,
@@ -31,10 +36,10 @@ class SettingsPageState extends State<SettingsPage> {
         body:
         Padding(
             padding: EdgeInsets.all(8.0),
-            child:infoText())
+            child:settingsContent(myState))
     );
   }
-  Widget infoText()
+  Widget settingsContent(AppState myState)
   {
     TextStyle textStyle = TextStyle(color: Colors.black);
     return(
@@ -42,7 +47,20 @@ class SettingsPageState extends State<SettingsPage> {
             children: <Widget> [
               Text(
                 "Ustawienia \n",style: textStyle,softWrap: true,
-              )
+              ),
+              Text("file path: "),
+              TextField(controller: _textFieldcontroller ,),
+              RaisedButton(
+                onPressed: () {
+                  // You can also use the controller to manipuate what is shown in the
+                  // text field. For example, the clear() method removes all the text
+                  // from the text field.
+                  myState.jsonAsset.getJsonFromUrl(_textFieldcontroller.text);
+                },
+                child: new Text('download'),
+              ),
+              Text("file in use"+myState.jsonAsset.currentJsonAssetPath),
+              Text("restore to default path"),
               ]));
 
 
