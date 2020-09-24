@@ -9,28 +9,28 @@ import '../widgets/PopupMenuOpenUrl.dart';
 import 'package:latlong/latlong.dart';
 import 'dart:developer';
 
-class buildIconBar extends StatefulWidget {
+class BuildIconBar extends StatefulWidget {
   final Rock _rockItem;
   final MapController _mapController;
 
-  buildIconBar(this._rockItem, this._mapController, {Key key}) : super(key: key);
+  BuildIconBar(this._rockItem, this._mapController, {Key key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() =>
       //_FavoriteButtonState();
-      buildIconBarState(this._rockItem, this._mapController);
+      BuildIconBarState(this._rockItem, this._mapController);
 }
 
-class buildIconBarState extends State<buildIconBar> {
+class BuildIconBarState extends State<BuildIconBar> {
   final Rock _rockItem;
   final MapController _mapController;
   final double iconSize = 30.0;
 
-  buildIconBarState(this._rockItem, this._mapController);
+  BuildIconBarState(this._rockItem, this._mapController);
 
   @override
   Widget build(BuildContext context) {
-    var myState = Provider.of<appState>(context, listen: true);
+    var myState = Provider.of<AppState>(context, listen: true);
     return Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
       InkWell(
           child: Container(
@@ -56,7 +56,7 @@ class buildIconBarState extends State<buildIconBar> {
               })),
       InkWell(
           child: Container(
-              child: DropDownOpenInfoPage(_rockItem.infoPage)
+              child: dropDownOpenInfoPage(_rockItem.infoPage)
               )),
       InkWell(
           child: Container(

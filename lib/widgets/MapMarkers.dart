@@ -13,16 +13,16 @@ class MapMarkers {
 
     for (var item in rocksItemsToDisplay)
       {
-        this.markers.add(CreateMarker(item));
+        this.markers.add(createMarker(item));
       }
 
     }
 
 
-  Marker CreateMarker(Item rockData) {
+  Marker createMarker(Item rockData) {
     return RockMarker(
         rock: RockContainer(
-          RockData: rockData,
+          rockData: rockData,
         ));
   }
 }
@@ -30,9 +30,9 @@ class MapMarkers {
 class RockContainer {
   static const double size = 100;
 
-  RockContainer({this.RockData});
+  RockContainer({this.rockData});
 
-  final Item RockData;
+  final Item rockData;
 }
 
 class RockMarker extends Marker {
@@ -41,8 +41,8 @@ class RockMarker extends Marker {
       anchorPos: AnchorPos.align(AnchorAlign.top),
       height: RockContainer.size,
       width: RockContainer.size,
-      point: new LatLng(double.parse(rock.RockData.lat),
-          double.parse(rock.RockData.lng)),
+      point: new LatLng(double.parse(rock.rockData.lat),
+          double.parse(rock.rockData.lng)),
       builder: (BuildContext ctx) =>
           Column(
             children: [
@@ -52,7 +52,7 @@ class RockMarker extends Marker {
                 size: 30.0,
                 semanticLabel: 'Rock pointer',
               ),
-              Text(rock.RockData.title , textAlign: TextAlign.center, style: TextStyle(color: Colors.black))
+              Text(rock.rockData.title , textAlign: TextAlign.center, style: TextStyle(color: Colors.black))
 
             ]
           )

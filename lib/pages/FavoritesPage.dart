@@ -27,7 +27,7 @@ class FavoritesPage extends State<Favorites> {
 
   @override
   Widget build(BuildContext context) {
-    var myState = Provider.of<appState>(context, listen: true);
+    var myState = Provider.of<AppState>(context, listen: true);
     return Scaffold(
         backgroundColor: Colors.orangeAccent,
         key: _scaffoldKey,
@@ -42,7 +42,7 @@ class FavoritesPage extends State<Favorites> {
             ])));
   }
 
-  List<Widget> _listFavorites(BuildContext context, appState myState) {
+  List<Widget> _listFavorites(BuildContext context, AppState myState) {
     List<Widget> favoriteList = new List();
 
     for (var entry in myState.favorites) {
@@ -54,7 +54,7 @@ class FavoritesPage extends State<Favorites> {
     return favoriteList;
   }
 
-  Widget _favoriteItem(appState myState, Rock rockItem) {
+  Widget _favoriteItem(AppState myState, Rock rockItem) {
     //return(Text(rockItem.title+" "+rockItem.lat+" "+rockItem.lng));
     return (Column(children: [
       Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: <Widget>[
@@ -82,7 +82,7 @@ class FavoritesPage extends State<Favorites> {
     return Container(child: createColorBoxes(rockItem));
   }
 
-  Widget actionButtons(appState myState, Rock rockItem) {
+  Widget actionButtons(AppState myState, Rock rockItem) {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
       InkWell(
           child: Container(
@@ -106,7 +106,7 @@ class FavoritesPage extends State<Favorites> {
           onTap: () => setState(() {
                 MapsLauncher.launchCoordinates(double.parse(rockItem.lat), double.parse(rockItem.lng));
               })),
-      InkWell(child: DropDownOpenInfoPage(rockItem.infoPage)
+      InkWell(child: dropDownOpenInfoPage(rockItem.infoPage)
           /*child: Container(child: Icon(Icons.open_in_new, color: Colors.blue, size: iconSize)),
           onTap: () => setState(() {
                 launchURL(rockItem.infoPage[0].url);

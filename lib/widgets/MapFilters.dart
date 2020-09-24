@@ -34,7 +34,7 @@ class MapFiltersWidget extends State<MapFilters> with SingleTickerProviderStateM
     super.initState();
   }
 
-  Widget ButtonsTogether() {
+  Widget buttonsTogether() {
     return Column(
       children: <Widget>[
         ShowFavorites(),
@@ -85,7 +85,7 @@ class MapFiltersWidget extends State<MapFilters> with SingleTickerProviderStateM
   Widget build(BuildContext context) {
     return Container(
       color: Theme.of(context).primaryColor,
-      child: ButtonsTogether(),
+      child: buttonsTogether(),
     );
   }
 }
@@ -100,7 +100,7 @@ class _ShowFavoritesState extends State<ShowFavorites> {
 
   @override
   Widget build(BuildContext context) {
-    var myState = Provider.of<appState>(context, listen: true);
+    var myState = Provider.of<AppState>(context, listen: true);
 
     Map<bool, Widget> _icons = {
       false: Icon(
@@ -114,17 +114,17 @@ class _ShowFavoritesState extends State<ShowFavorites> {
         size: 24.0,
       )
     };
-    return Consumer<appState>(builder: (context, _filterState, _) {
+    return Consumer<AppState>(builder: (context, _filterState, _) {
       return InkWell(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text("Tylko Ulubione", style: TextStyle(color: Colors.black)),
-            _icons[myState.FilterState["showOnlyFavorites"]]
+            _icons[myState.filterState["showOnlyFavorites"]]
           ],
         ),
         onTap: () => setState(() {
-          bool currentFavoriteState = !myState.FilterState["showOnlyFavorites"];
+          bool currentFavoriteState = !myState.filterState["showOnlyFavorites"];
           myState.setFilterState("showOnlyFavorites", currentFavoriteState);
         }),
       );
@@ -165,25 +165,25 @@ class _ShowRocksWithRouteLevelState extends State<ShowRocksWithRouteLevel> {
 
   @override
   Widget build(BuildContext context) {
-    var myState = Provider.of<appState>(context, listen: true);
+    var myState = Provider.of<AppState>(context, listen: true);
     Color boxColor = Colors.transparent;
 
     String boxName = myState.filterContent[widget.filterName];
-    if (myState.FilterState[widget.filterName] == true) {
+    if (myState.filterState[widget.filterName] == true) {
 
       boxColor = _routeToColorMappings[myState.filterContent[widget.filterName]];
     }
 
-    return Consumer<appState>(builder: (context, _filterState, _) {
+    return Consumer<AppState>(builder: (context, _filterState, _) {
       return InkWell(
         child: Container(
 
           child:
-            DrawBox(boxName,boxColor),
+            drawBox(boxName,boxColor),
 
         ),
         onTap: () => setState(() {
-          bool currentFilterRouteState = !myState.FilterState[widget.filterName];
+          bool currentFilterRouteState = !myState.filterState[widget.filterName];
           myState.setFilterState(widget.filterName, currentFilterRouteState);
         }),
       );
@@ -191,7 +191,7 @@ class _ShowRocksWithRouteLevelState extends State<ShowRocksWithRouteLevel> {
   }
 }
 
-Widget DrawBox(String boxText, Color fillColor) {
+Widget drawBox(String boxText, Color fillColor) {
   return (
       Stack(
       children: [

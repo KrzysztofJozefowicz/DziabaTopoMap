@@ -8,26 +8,26 @@ import '../widgets/RouteStatBoxes.dart';
 import '../widgets/RouteIconBar.dart';
 import 'dart:developer';
 
-class markerPopup extends StatefulWidget {
+class MarkerPopup extends StatefulWidget {
   final Marker marker;
   final MapController mapController;
 
-  markerPopup(this.marker, this.mapController, {Key key}) : super(key: key);
+  MarkerPopup(this.marker, this.mapController, {Key key}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => _markerPopupState(this.marker, this.mapController);
+  State<StatefulWidget> createState() => _MarkerPopupState(this.marker, this.mapController);
 }
 
-class _markerPopupState extends State<markerPopup> {
+class _MarkerPopupState extends State<MarkerPopup> {
   final RockMarker _marker;
   final MapController _mapController;
 
-  _markerPopupState(this._marker, this._mapController);
+  _MarkerPopupState(this._marker, this._mapController);
 
   @override
   Widget build(BuildContext context) {
-    var myState = Provider.of<appState>(context, listen: true);
-    return Consumer<appState>(builder: (context, favorites, _) {
+    var myState = Provider.of<AppState>(context, listen: true);
+    return Consumer<AppState>(builder: (context, favorites, _) {
       return Card(
         color: Colors.orangeAccent,
         child: InkWell(
@@ -44,7 +44,7 @@ class _markerPopupState extends State<markerPopup> {
                       _rockName(myState),
                       _createBoxes(),
                       //_createLegends(),
-                      buildIconBar(_marker.rock.RockData, _mapController)
+                      BuildIconBar(_marker.rock.rockData, _mapController)
                     ]),
               ),
               //_cardDescription(context),
@@ -56,9 +56,9 @@ class _markerPopupState extends State<markerPopup> {
     });
   }
 
-  Widget _rockName(appState myState) {
+  Widget _rockName(AppState myState) {
     return InkWell(
-      child: Text(_marker.rock.RockData.title,
+      child: Text(_marker.rock.rockData.title,
           overflow: TextOverflow.fade,
           softWrap: false,
           style: const TextStyle(
@@ -68,7 +68,7 @@ class _markerPopupState extends State<markerPopup> {
           )),
       onTap: () =>
           setState(() {
-            myState.rockItem = _marker.rock.RockData;
+            myState.rockItem = _marker.rock.rockData;
           }),
     );
   }

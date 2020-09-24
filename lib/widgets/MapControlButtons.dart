@@ -35,19 +35,19 @@ class MapControlButtonsWidget extends State<MapControlButtons> {
 
   @override
   Widget build(BuildContext context) {
-    var myState = Provider.of<appState>(context, listen: true);
+    var myState = Provider.of<AppState>(context, listen: true);
     return Positioned(
         bottom: 0,
         right: 0,
         child:Column(
       children: [
-        UserLocationFAB(userLocationOptions,mapController,myState),
-        ZoomFAB(mapController,"zoom_in"),
-        ZoomFAB(mapController,"zoom_out"),
+        userLocationFAB(userLocationOptions,mapController,myState),
+        zoomFAB(mapController,"zoom_in"),
+        zoomFAB(mapController,"zoom_out"),
       ],
     ));
   }
-  Widget UserLocationFAB(UserLocationOptions userLocationOptions, MapController mapController, appState myState)
+  Widget userLocationFAB(UserLocationOptions userLocationOptions, MapController mapController, AppState myState)
   {
 
     log(userLocationOptions.updateMapLocationOnPositionChange.toString());
@@ -66,7 +66,7 @@ class MapControlButtonsWidget extends State<MapControlButtons> {
       )
     );
   }
-  Widget ZoomFAB(MapController mapController,String action)
+  Widget zoomFAB(MapController mapController,String action)
   {
     double zoomStep = (action == "zoom_in")? 1 : -1 ;
     Map<String, Widget> _icons = {

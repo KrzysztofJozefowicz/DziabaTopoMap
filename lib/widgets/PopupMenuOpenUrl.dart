@@ -4,7 +4,7 @@ import '../dataProvider/RockLoader.dart';
 import '../Helpers/Helpers.dart';
 import '../Helpers/CustomIcons.dart';
 
-PopupMenuButton<String> DropDownOpenInfoPage(List<InfoPage> infoPage) {
+PopupMenuButton<String> dropDownOpenInfoPage(List<InfoPage> infoPage) {
 
 
   return PopupMenuButton<String>(
@@ -16,7 +16,7 @@ PopupMenuButton<String> DropDownOpenInfoPage(List<InfoPage> infoPage) {
 
     ),
     offset: Offset(105,200),
-    itemBuilder: (context) => GeneratePopupMenuItem(infoPage),
+    itemBuilder: (context) => generatePopupMenuItem(infoPage),
 
     onSelected: (value) {
       launchURL(value);
@@ -24,7 +24,7 @@ PopupMenuButton<String> DropDownOpenInfoPage(List<InfoPage> infoPage) {
   );
 
 }
-List<PopupMenuItem<String>> GeneratePopupMenuItem(List<InfoPage> infoPage) {
+List<PopupMenuItem<String>> generatePopupMenuItem(List<InfoPage> infoPage) {
   List<PopupMenuItem<String>>myList = new List();
   for (var element in infoPage) {
     myList.add(

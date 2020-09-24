@@ -11,7 +11,7 @@ launchURL(String url) async {
   }
 }
 
-Set<String> ApplyFilters(
+Set<String> applyFilters(
     Map<String, Item> itemsToFilter, Map<String, bool> filtersState, Map<String, dynamic> filtersContent) {
   Set<String> filteredItems = new Set();
 

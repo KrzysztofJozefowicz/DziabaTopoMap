@@ -33,10 +33,10 @@ class InfoPageState extends State<InfoPage> {
         body:
         Padding(
             padding: EdgeInsets.all(8.0),
-            child:InfoText())
+            child:infoText())
           );
   }
-  Widget InfoText()
+  Widget infoText()
   {
     TextStyle textStyle = TextStyle(color: Colors.black);
     return(

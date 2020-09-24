@@ -10,7 +10,7 @@ import 'dart:developer';
 void main() {
   runApp(
     ChangeNotifierProvider(
-      create: (context) => appState(),
+      create: (context) => AppState(),
       child: MyApp(),
     ),
   );
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    var myState = Provider.of<appState>(context, listen: true);
+    var myState = Provider.of<AppState>(context, listen: true);
     if (myState.isLoadedFromSharedPrefs == false) {
       _loadPreferences(myState);
       myState.isLoadedFromSharedPrefs = true;
@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-_loadPreferences(appState myState) async {
+_loadPreferences(AppState myState) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   if (prefs.containsKey("Favorites")) {
     if (prefs.getStringList("Favorites") != null && prefs.getStringList("Favorites").length > 0) {

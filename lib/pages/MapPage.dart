@@ -44,7 +44,7 @@ class TopoMapPage extends State<TopoMap> {
 
   @override
   Widget build(BuildContext context) {
-    var myState = Provider.of<appState>(context, listen: true);
+    var myState = Provider.of<AppState>(context, listen: true);
 
     return Scaffold(
       key: _scaffoldKey,
@@ -56,14 +56,14 @@ class TopoMapPage extends State<TopoMap> {
           children: [
             Column(
               children: [
-                Flexible(child: Consumer<appState>(builder: (context, _filterState, _) {
+                Flexible(child: Consumer<AppState>(builder: (context, _filterState, _) {
                   return FutureBuilder<Map<String, Map<String, Item>>>(
                     future: futureData,
                     builder: (context, snapshot) {
                       if (snapshot.hasData && (snapshot.data["rock"].length != null)) {
                         myState.populateRocks(snapshot.data["rock"]);
-                        myState.RocksIdToDisplay =
-                            ApplyFilters(myState.rocks, myState.FilterState, myState.filterContent);
+                        myState.rocksIdToDisplay =
+                            applyFilters(myState.rocks, myState.filterState, myState.filterContent);
                         MapMarkers myMarkers = new MapMarkers(myState.getRocksItemsToDisplay());
                         List<Marker> markers = myMarkers.markers;
                         List<Marker> markersEmpty = new List();
@@ -113,7 +113,7 @@ class TopoMapPage extends State<TopoMap> {
                                           color: Colors.transparent,
                                           child: GestureDetector(
                                               onTap: () => debugPrint("Popup tap!"),
-                                              child: markerPopup(marker, mapController)),
+                                              child: MarkerPopup(marker, mapController)),
                                         )),
                                 builder: (context, markers) {
                                   return FloatingActionButton(

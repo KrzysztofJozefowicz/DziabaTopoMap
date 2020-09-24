@@ -4,7 +4,7 @@ import 'package:latlong/latlong.dart';
 import 'dart:developer';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class  appState extends ChangeNotifier {
+class  AppState extends ChangeNotifier {
   String _url = "";
   Item  _rockItem;
   Color favColor = Colors.transparent;
@@ -13,7 +13,7 @@ class  appState extends ChangeNotifier {
   Map<String,Item> _rocks = new Map();
   Map<String,bool> _filterState = _defaultFilterState();
   Map<String,dynamic> filterContent = _defaultFilterContent() ;
-  Map<String,bool> get FilterState => _filterState;
+  Map<String,bool> get filterState => _filterState;
   bool isLoadedFromSharedPrefs = false;
   LatLng currentUserLocation;
   LatLng currentMapLocation;
@@ -21,7 +21,7 @@ class  appState extends ChangeNotifier {
 
 
 
-  set RocksIdToDisplay(Iterable elements) {
+  set rocksIdToDisplay(Iterable elements) {
     _rocksIdToDisplay = new Set();
     _rocksIdToDisplay.addAll(elements);
   }
@@ -153,11 +153,11 @@ class  appState extends ChangeNotifier {
     return (filterContent);
   }
 }
-_saveFavorites(List<String> FavoritesList) async {
+_saveFavorites(List<String> favoritesList) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   log("saving favorites");
-  log(FavoritesList.toString());
-  await prefs.setStringList("Favorites", FavoritesList);
+  log(favoritesList.toString());
+  await prefs.setStringList("Favorites", favoritesList);
 }
 
 

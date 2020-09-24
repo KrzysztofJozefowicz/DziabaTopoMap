@@ -6,7 +6,7 @@ import 'dart:developer';
 Widget createColorBoxes(dynamic rockData) {
   dynamic rock;
   if (rockData is RockMarker) {
-    rock = rockData.rock.RockData;
+    rock = rockData.rock.rockData;
   }
   if (rockData is Rock) {
     rock = rockData;
