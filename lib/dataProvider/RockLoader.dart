@@ -1,12 +1,9 @@
 import 'dart:convert' show json;
 import 'package:flutter/services.dart' show rootBundle;
 
-Future<Map<String, Map<String, Item>>> fetchData() async {
-  return await loadAsset();
-}
 
-Future<Map<String, Map<String, Item>>> loadAsset() async {
-  final response = await rootBundle.loadString('assets/rockApiData.json');
+Future<Map<String, Map<String, Item>>> loadAssetFromJson(String jsonFilePath) async {
+  final response = await rootBundle.loadString(jsonFilePath);
   return groupItemsByType(json.decode(response));
 }
 
