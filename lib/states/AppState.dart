@@ -3,7 +3,7 @@ import '../dataProvider/RockLoader.dart';
 import 'package:latlong/latlong.dart';
 import 'dart:developer';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../widgets/JsonHandler.dart';
+import '../dataProvider/JsonHandler.dart';
 
 class  AppState extends ChangeNotifier {
   String _url = "";

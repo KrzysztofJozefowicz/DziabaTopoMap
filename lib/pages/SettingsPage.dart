@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../widgets/Drawer.dart';
-import '../widgets/JsonHandler.dart';
+import '../dataProvider/JsonHandler.dart';
 import '../states/AppState.dart';
 import 'package:provider/provider.dart';
 
