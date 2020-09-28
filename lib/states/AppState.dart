@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import '../dataProvider/RockLoader.dart';
 import 'package:latlong/latlong.dart';
 import 'dart:developer';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../dataProvider/JsonHandler.dart';
+import '../states/persistantPreferencesHandler.dart';
 
 class  AppState extends ChangeNotifier {
   String _url = "";
@@ -18,6 +18,7 @@ class  AppState extends ChangeNotifier {
   bool isLoadedFromSharedPrefs = false;
   LatLng currentUserLocation;
   LatLng currentMapLocation;
+
   JsonObject jsonAsset = new JsonObject();
 
   set rocksIdToDisplay(Iterable elements) {
@@ -75,13 +76,13 @@ class  AppState extends ChangeNotifier {
     if (favorites == null)
       {
         favorites.add(id);
-        _saveFavorites(favorites);
+        PreferencesHandler.saveFavorites(favorites);
         notifyListeners();
       }
     if (!favorites.contains(id))
       {
         favorites.add(id);
-        _saveFavorites(favorites);
+        PreferencesHandler.saveFavorites(favorites);
         notifyListeners();
       }
   }
@@ -91,7 +92,7 @@ class  AppState extends ChangeNotifier {
     if (favorites.contains(id) && favorites != null)
       {
         favorites.remove(id);
-        _saveFavorites(favorites);
+        PreferencesHandler.saveFavorites(favorites);
         notifyListeners();
       }
   }
@@ -151,12 +152,22 @@ class  AppState extends ChangeNotifier {
     filterContent["includeWithVI.8"]="VI.8";
     return (filterContent);
   }
-}
-_saveFavorites(List<String> favoritesList) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  log("saving favorites");
-  log(favoritesList.toString());
-  await prefs.setStringList("Favorites", favoritesList);
+
+   void loadFromPreferences (Future <Map<String,dynamic>> preferenceMap) async{
+    Map<String,dynamic> loadedPreferences = await preferenceMap;
+    for (String key in loadedPreferences.keys)
+      {
+        if (key == "favorites")
+        {
+          for (var item in loadedPreferences[key]) {
+            addToFavorites(item);
+            filterContent[key] = favorites;
+          }
+        }
+
+      }
+
+  }
 }
 
 

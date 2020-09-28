@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:dziabak_map/pages/FavoritesPage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import './states/persistantPreferencesHandler.dart';
 import './pages/MapPage.dart';
 import './pages/InfoPage.dart';
 import './pages/SettingsPage.dart';
@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     var myState = Provider.of<AppState>(context, listen: true);
     if (myState.isLoadedFromSharedPrefs == false) {
-      _loadPreferences(myState);
+      myState.loadFromPreferences( PreferencesHandler.loadPreferences());
       myState.isLoadedFromSharedPrefs = true;
     }
 
@@ -50,16 +50,3 @@ class MyApp extends StatelessWidget {
   }
 }
 
-_loadPreferences(AppState myState) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  if (prefs.containsKey("Favorites")) {
-    if (prefs.getStringList("Favorites") != null && prefs.getStringList("Favorites").length > 0) {
-      List<String> savedFavorites = prefs.getStringList("Favorites");
-      for (var item in savedFavorites) {
-        myState.addToFavorites(item);
-        myState.filterContent["favorites"] = myState.favorites;
-      }
-    }
-  } else {
-  }
-}
