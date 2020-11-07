@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../widgets/Drawer.dart';
-import '../dataProvider/JsonHandler.dart';
+import '../dataProvider/JsonAssetHandler.dart';
 import '../states/AppState.dart';
 import 'package:provider/provider.dart';
+import 'package:download_assets/download_assets.dart';
 
 class SettingsPage extends StatefulWidget {
   static const String route = 'SettingsPage';
@@ -21,6 +22,7 @@ class SettingsPageState extends State<SettingsPage> {
   void initState() {
     super.initState();
     _textFieldcontroller  = new TextEditingController(text: 'https://github.com/KrzysztofJozefowicz/DziabaTopoMap/blob/master/assets/rockApiData.json');
+    DownloadAssetsController.init();
   }
 
   @override
@@ -55,7 +57,7 @@ class SettingsPageState extends State<SettingsPage> {
                   // You can also use the controller to manipuate what is shown in the
                   // text field. For example, the clear() method removes all the text
                   // from the text field.
-                  myState.jsonAsset.getJsonFromUrl(_textFieldcontroller.text);
+                  myState.jsonAsset.getNewJsonAndActivateIt(_textFieldcontroller.text);
                 },
                 child: new Text('download'),
               ),

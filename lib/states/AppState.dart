@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../dataProvider/RockLoader.dart';
 import 'package:latlong/latlong.dart';
 import 'dart:developer';
-import '../dataProvider/JsonHandler.dart';
+import '../dataProvider/JsonAssetHandler.dart';
 import '../states/persistantPreferencesHandler.dart';
 
 class  AppState extends ChangeNotifier {
@@ -18,8 +18,8 @@ class  AppState extends ChangeNotifier {
   bool isLoadedFromSharedPrefs = false;
   LatLng currentUserLocation;
   LatLng currentMapLocation;
-
   JsonObject jsonAsset = new JsonObject();
+
 
   set rocksIdToDisplay(Iterable elements) {
     _rocksIdToDisplay = new Set();
@@ -164,6 +164,10 @@ class  AppState extends ChangeNotifier {
             filterContent[key] = favorites;
           }
         }
+        if (key == "jsonAssetPath")
+          {
+            jsonAsset.setJsonAssetPath(loadedPreferences[key]);
+          }
 
       }
 

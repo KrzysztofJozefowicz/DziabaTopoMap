@@ -45,7 +45,7 @@ class TopoMapPage extends State<TopoMap> {
   @override
   Widget build(BuildContext context) {
     var myState = Provider.of<AppState>(context, listen: true);
-    futureData = loadAssetFromJson(myState.jsonAsset.getActiveJsonAssetPath());
+    futureData = loadAssetFromJson(myState.jsonAsset.getJsonAssetPath());
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(title: Text('DziabaTopo')),

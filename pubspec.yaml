@@ -36,6 +36,7 @@ dependencies:
   flutter_map_marker_cluster: any
   global_configuration: any
   shared_preferences: '>=0.5.0 <2.0.0'
+  path_provider: ^1.1.0
   user_location:
     git:
       url: https://github.com/igaurab/user_location_plugin.git
